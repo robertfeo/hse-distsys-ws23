@@ -13,7 +13,7 @@
 	<artifactId>backend</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>backend</name>
-	<description>Demo project for Spring Boot</description>
+	<description>Todolist App</description>
 	<properties>
 		<java.version>17</java.version>
 	</properties>
@@ -78,6 +78,8 @@
 							<artifactId>lombok</artifactId>
 						</exclude>
 					</excludes>
+					<source>17</source>
+					<target>17</target>
 				</configuration>
 			</plugin>
 		</plugins>
