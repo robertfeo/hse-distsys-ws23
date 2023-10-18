@@ -31,7 +31,7 @@ public class TodoItemService {
     public ResponseEntity<String> addToDoItem(TodoItem todoItem) {
         try {
             todoItemDao.save(todoItem);
-            return new ResponseEntity<>("Question added successfully.", HttpStatus.CREATED);
+            return new ResponseEntity<>("Todo-Item added successfully.", HttpStatus.CREATED);
         } catch (Exception e) {
             e.printStackTrace();
         }
