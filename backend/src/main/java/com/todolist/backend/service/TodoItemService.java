@@ -1,24 +1,30 @@
 package com.todolist.backend.service;
 
 import com.todolist.backend.model.TodoItem;
-import com.todolist.backend.repository.TodoItemRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.todolist.backend.repository.TodoItemDao;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class TodoItemService {
 
-    @Autowired
-    private final TodoItemRepository todoItemRepository;
+    private final TodoItemDao todoItemRepository;
 
-    public TodoItemService(TodoItemRepository todoItemRepository) {
+    public TodoItemService(TodoItemDao todoItemRepository) {
         this.todoItemRepository = todoItemRepository;
     }
 
-    public List<TodoItem> findAll() {
-        return todoItemRepository.findAll();
+    public ResponseEntity<List<TodoItem>> findAll() {
+        try {
+            return new ResponseEntity<>(todoItemRepository.findAll(), HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new ResponseEntity<>(new ArrayList<>(), HttpStatus.BAD_REQUEST);
     }
 }

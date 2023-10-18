@@ -1,15 +1,13 @@
 package com.todolist.backend.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.Data;
 
-import java.time.LocalDate;
-
-@Entity
 @Data
+@Entity
 public class TodoItem {
 
     @Id
@@ -20,18 +18,8 @@ public class TodoItem {
 
     private String description;
 
-    private LocalDate dueDate;
-
-    private Status status;
-
-    public TodoItem(String title, String description, LocalDate dueDate, Status status) {
+    public TodoItem(String title, String description) {
         this.title = title;
         this.description = description;
-        this.dueDate = dueDate;
-        this.status = status;
-    }
-
-    public enum Status {
-        TODO, IN_PROGRESS, DONE
     }
 }
