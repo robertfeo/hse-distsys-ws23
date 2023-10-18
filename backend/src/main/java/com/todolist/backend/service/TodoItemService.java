@@ -2,7 +2,6 @@ package com.todolist.backend.service;
 
 import com.todolist.backend.model.TodoItem;
 import com.todolist.backend.repository.TodoItemDao;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -13,18 +12,28 @@ import java.util.List;
 @Service
 public class TodoItemService {
 
-    private final TodoItemDao todoItemRepository;
+    private final TodoItemDao todoItemDao;
 
     public TodoItemService(TodoItemDao todoItemRepository) {
-        this.todoItemRepository = todoItemRepository;
+        this.todoItemDao = todoItemRepository;
     }
 
     public ResponseEntity<List<TodoItem>> findAll() {
         try {
-            return new ResponseEntity<>(todoItemRepository.findAll(), HttpStatus.OK);
+            return new ResponseEntity<>(todoItemDao.findAll(), HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
         }
         return new ResponseEntity<>(new ArrayList<>(), HttpStatus.BAD_REQUEST);
+    }
+
+    public ResponseEntity<String> addQuestion(TodoItem todoItem) {
+        try {
+            todoItemDao.save(todoItem);
+            return new ResponseEntity<>("Question added successfully.", HttpStatus.CREATED);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new ResponseEntity<>("", HttpStatus.BAD_REQUEST);
     }
 }
