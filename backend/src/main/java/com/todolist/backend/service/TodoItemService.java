@@ -38,7 +38,17 @@ public class TodoItemService {
         return new ResponseEntity<>("", HttpStatus.BAD_REQUEST);
     }
 
-    public Optional<TodoItem> findById(Integer id) {
-        return todoItemDao.findById(id);
+    public ResponseEntity<TodoItem> getTodoItemByTitle(String title) {
+        try {
+            Optional<TodoItem> todoItemOptional = todoItemDao.findByTitle(title);
+            if (todoItemOptional.isPresent()) {
+                return new ResponseEntity<>(todoItemOptional.get(), HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 }
