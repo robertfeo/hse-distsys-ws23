@@ -13,5 +13,5 @@ COPY target/backend-*.jar app.jar
 # The command to run the application
 ENTRYPOINT ["java", "-jar", "app.jar"]
 
-# Expose the application's port (Change 8080 if your app runs on a different port)
+# Expose the application's port
 EXPOSE 8080
