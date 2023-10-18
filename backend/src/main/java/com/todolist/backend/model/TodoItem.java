@@ -6,10 +6,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Entity
 @AllArgsConstructor
+@NoArgsConstructor
 public class TodoItem {
 
     @Id
@@ -19,9 +21,4 @@ public class TodoItem {
     private String title;
 
     private String description;
-
-    public TodoItem(String title, String description) {
-        this.title = title;
-        this.description = description;
-    }
 }
