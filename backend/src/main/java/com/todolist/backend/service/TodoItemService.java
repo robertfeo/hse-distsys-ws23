@@ -27,7 +27,7 @@ public class TodoItemService {
         return new ResponseEntity<>(new ArrayList<>(), HttpStatus.BAD_REQUEST);
     }
 
-    public ResponseEntity<String> addQuestion(TodoItem todoItem) {
+    public ResponseEntity<String> addToDoItem(TodoItem todoItem) {
         try {
             todoItemDao.save(todoItem);
             return new ResponseEntity<>("Question added successfully.", HttpStatus.CREATED);
