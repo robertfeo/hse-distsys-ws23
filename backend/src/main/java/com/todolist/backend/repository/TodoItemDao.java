@@ -10,6 +10,7 @@ import java.util.List;
 
 @Repository
 public interface TodoItemDao extends JpaRepository<TodoItem, Integer> {
+
     @Transactional
     List<TodoItem> findAll();
 
