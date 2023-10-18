@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TodoItemService {
@@ -35,5 +36,9 @@ public class TodoItemService {
             e.printStackTrace();
         }
         return new ResponseEntity<>("", HttpStatus.BAD_REQUEST);
+    }
+
+    public Optional<TodoItem> findById(Integer id) {
+        return todoItemDao.findById(id);
     }
 }
