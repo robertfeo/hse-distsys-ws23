@@ -4,7 +4,7 @@ SHELL ["/bin/bash", "-c"]
 RUN source "/home/gitpod/.sdkman/bin/sdkman-init.sh"  \
     && sdk install java 17.0.4.1-tem < /dev/null
 
-RUN bash -c 'VERSION="14.8.0" \
+RUN bash -c 'VERSION="21.0.0" \
     && source $HOME/.nvm/nvm.sh && nvm install $VERSION \
     && nvm use $VERSION && nvm alias default $VERSION'
 
