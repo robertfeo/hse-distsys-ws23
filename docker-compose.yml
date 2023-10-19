@@ -1,7 +1,8 @@
 version: '3.8'
 services:
   backend:
-    image: backend
+    container_name: backend
+    image: img-backend
     build:
       context: ./backend/
       dockerfile: Dockerfile
@@ -14,7 +15,8 @@ services:
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/todolist
   database:
-    image: database
+    container_name: database
+    image: img-database
     build:
       context: ./backend/database/
       dockerfile: Dockerfile
@@ -31,7 +33,9 @@ services:
 
 networks:
   todolist-network:
+    name: todolist-network
     driver: bridge
 
 volumes:
   db-data:
+    name: volume-database
