@@ -22,7 +22,7 @@ public class TodoItemController {
         return todoItemService.findAll();
     }
 
-    @GetMapping("/search")
+    @GetMapping("search")
     public ResponseEntity<List<TodoItem>> searchTodoItem(@RequestParam(required = false) String title,
             @RequestParam(required = false) Integer id) {
         if (title == null && id == null) {
@@ -36,7 +36,7 @@ public class TodoItemController {
         return todoItemService.addToDoItem(todoItem);
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping("delete")
     public ResponseEntity<String> deleteTodoItem(@RequestParam(required = false) String title,
             @RequestParam(required = false) Integer id) {
         if (title == null && id == null) {
