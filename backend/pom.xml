@@ -11,7 +11,7 @@
 	</parent>
 	<groupId>com.todolist</groupId>
 	<artifactId>backend</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>v-0.1</version>
 	<name>backend</name>
 	<description>Todolist App</description>
 	<properties>
