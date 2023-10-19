@@ -3,7 +3,7 @@ services:
   backend:
     image: backend
     build:
-      context: ./backend/Dockerfile
+      context: ./backend/
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
@@ -15,7 +15,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/todolist
   database:
     build:
-      context: ./backend/database/Dockerfile
+      context: ./backend/database/
       dockerfile: Dockerfile
     environment:
       POSTGRES_USER: robert
