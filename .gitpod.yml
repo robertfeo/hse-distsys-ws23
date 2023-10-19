@@ -1,2 +1,4 @@
 tasks:
-    - init: sdk install java 17.0.4.1-tem < /dev/null
+  - init: |
+      sdk install java 17.0.4.1-tem
+      sdk default java 17.0.4.1-tem
