@@ -1,31 +1,64 @@
-const BASE_URL = "http://localhost:8080/api/todos";
+import { Response, Request } from 'express';
 
-export const fetchTodos = async () => {
-    return await fetch(BASE_URL).then(res => res.json());
-}
+const express = require('express');
+const bodyParser = require('body-parser');
+const cors = require('cors');
 
-export const addTodo = async (title: string, description: string) => {
-    return await fetch(`${BASE_URL}/add`, {
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ title, description })
-    }).then(res => res.json());
-}
+const app = express();
+const PORT = 8080;
 
-export const deleteTodoByTitle = async (title: string) => {
-    return await fetch(`${BASE_URL}/delete?title=${title}`, { method: "DELETE" });
-}
+// Middleware
+app.use(bodyParser.json());
+app.use(cors());
 
-export const deleteTodoById = async (id: number) => {
-    return await fetch(`${BASE_URL}/delete?id=${id}`, { method: "DELETE" });
-}
+// Sample data
+let todos: { id: number; title: string; description: string }[] = [];
 
-export const searchTodoByTitle = async (title: string) => {
-    return await fetch(`${BASE_URL}/search?title=${title}`).then(res => res.json());
-}
+// Routes
+app.get('/api/todos', (req: Request, res: Response) => {
+    res.json(todos);
+});
 
-export const searchTodoById = async (id: number) => {
-    return await fetch(`${BASE_URL}/search?id=${id}`).then(res => res.json());
-}
+app.post('/api/todos/add', (req: Request, res: Response) => {
+    const { title, description } = req.body;
+    const newTodo = { id: todos.length + 1, title, description };
+    todos.push(newTodo);
+    res.json(newTodo);
+});
+
+app.delete('/api/todos/delete', (req: Request, res: Response) => {
+    const { title, id } = req.query;
+
+    if (typeof title === 'string') {
+        todos = todos.filter(todo => todo.title !== title);
+        return res.json({ message: 'Todo with title deleted' });
+    }
+
+    if (typeof id === 'string') {
+        todos = todos.filter(todo => todo.id !== parseInt(id, 10));
+        return res.json({ message: 'Todo with id deleted' });
+    }
+
+    res.status(400).json({ error: 'Provide a title or id for deletion' });
+});
+
+app.get('/api/todos/search', (req: Request, res: Response) => {
+    const { title, id } = req.query;
+
+    if (typeof title === 'string') {
+        const result = todos.filter(todo => todo.title === title);
+        return res.json(result);
+    }
+
+    if (typeof id === 'string') {
+        const result = todos.filter(todo => todo.id === parseInt(id, 10));
+        return res.json(result);
+    }
+
+    res.status(400).json({ error: 'Provide a title or id for search' });
+});
+
+// Start server
+app.listen(PORT, () => {
+    console.log(`Server started on http://localhost:${PORT}`);
+});
