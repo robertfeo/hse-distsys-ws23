@@ -6,3 +6,4 @@ tasks:
       mvn clean package
       cd ..
       docker-compose up -d
+      npm install -g npm@10.2.1
