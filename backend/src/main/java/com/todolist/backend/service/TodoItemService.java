@@ -80,22 +80,20 @@ public class TodoItemService {
         }
     }
 
-    public ResponseEntity<String> updateTodoItem(Integer id, TodoItem updatedTodoItem) {
-        try {
-            Optional<TodoItem> todoItem = todoItemDao.findById(id);
-            if (todoItem.isPresent()) {
-                TodoItem existingTodoItem = todoItem.get();
-                existingTodoItem.setTitle(updatedTodoItem.getTitle());
-                existingTodoItem.setDescription(updatedTodoItem.getDescription());
-                existingTodoItem.setStatus(updatedTodoItem.isStatus());
-                todoItemDao.save(existingTodoItem);
-                return new ResponseEntity<>("Todo-Item with ID '" + id + "' updated successfully.", HttpStatus.OK);
-            } else {
-                return new ResponseEntity<>("Todo-Item with ID '" + id + "' not found.", HttpStatus.NOT_FOUND);
-            }
-        } catch (Exception e) {
-            logger.error("Error updating TodoItem: ", e);
-            return new ResponseEntity<>("Error updating TodoItem.", HttpStatus.BAD_REQUEST);
-        }
-    }
+    /*
+     * public ResponseEntity<String> updateTodoItem(Integer id, TodoItem
+     * updatedTodoItem) {
+     * Optional<TodoItem> todoItem = todoItemDao.findById(id);
+     * if (todoItem.isPresent()) {
+     * TodoItem existingItem = todoItem.get();
+     * existingItem.setTitle(updatedTodoItem.getTitle());
+     * existingItem.setDescription(updatedTodoItem.getDescription());
+     * existingItem.setStatus(updatedTodoItem.isStatus());
+     * todoItemDao.save(existingItem);
+     * return ResponseEntity.ok("Todo item updated");
+     * } else {
+     * return ResponseEntity.notFound().build();
+     * }
+     * }
+     */
 }
