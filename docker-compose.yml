@@ -1,0 +1,25 @@
+version: '3.8'
+services:
+  backend:
+    image: backend # replace with the name of your backend Docker image
+    build:
+      context: ./backend/Dockerfile # replace with the path to your backend's Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - database
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/todolist
+  database:
+    image: ./backend/database/Dockerfile
+    environment:
+      POSTGRES_USER: robert
+      POSTGRES_PASSWORD: securepassword
+      POSTGRES_DB: todolist
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+volumes:
+  db-data:
