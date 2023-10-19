@@ -44,4 +44,10 @@ public class TodoItemController {
         }
         return todoItemService.deleteTodoItem(title, id);
     }
+
+    @PutMapping("update")
+    public ResponseEntity<String> updateTodoItem(@RequestParam(required = true) Integer id,
+            @RequestBody TodoItem todoItem) {
+        return todoItemService.updateTodoItem(id, todoItem);
+    }
 }
