@@ -4,5 +4,5 @@ tasks:
     - name: Compile Backend
       command: cd backend/ | mvn clean package
     - name: Build Docker Project
-      command: docker-compose up --build
+      command: docker-compose up -d
     
