@@ -1,9 +1,2 @@
-tasks:
-  - before: |
-      echo "Initial Java version:"
-      java -version
-  - init: |
-      sdk install java 17.0.4.1-tem
-      sdk default java 17.0.4.1-tem
-      echo "New Java version:"
-      java -version
+image:
+    file: .gitpod.Dockerfile
