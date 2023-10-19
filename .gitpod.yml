@@ -2,7 +2,6 @@ image:
     file: .gitpod.Dockerfile
 tasks:
     - name: Compile Backend
-      command: mvn clean package
+      command: cd backend/ | mvn clean package
     - name: Build Docker Project
       command: docker-compose up -d
-    
