@@ -22,5 +22,5 @@ public class TodoItem {
 
     private String description;
 
-    private boolean status;
+    /* private boolean status; */
 }
