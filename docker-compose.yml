@@ -14,6 +14,7 @@ services:
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/todolist
   database:
+    image: database
     build:
       context: ./backend/database/
       dockerfile: Dockerfile
