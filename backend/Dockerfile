@@ -1,5 +1,5 @@
 # Use the official OpenJDK image as a base image
-FROM openjdk:11-jre-slim
+FROM openjdk:17-jdk-slim
 
 # Information about the maintainer
 LABEL maintainer="rofeit00@hs-esslingen.de"
