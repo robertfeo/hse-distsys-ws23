@@ -3,5 +3,6 @@
     "java.configuration.updateBuildConfiguration": "automatic",
     "githubPullRequests.ignoredPullRequestBranches": [
         "main"
-    ]
+    ],
+    "git.ignoreLimitWarning": true
 }
