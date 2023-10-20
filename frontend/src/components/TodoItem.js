@@ -10,11 +10,11 @@ function TodoItem({ todo, onDelete, onEdit }) {
                         {todo.title}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                        {todo.description}
+                        {todo.description ? todo.description : '-'}
                     </Typography>
                 </Grid>
                 <Grid item xs={4} container justifyContent="flex-end">
-                    <Button size="small" variant="contained" color="primary" onClick={() => onEdit(todo.id)}>
+                    <Button size="small" variant="outlined" color="primary" onClick={() => onEdit(todo.id)}>
                         Edit
                     </Button>
                     <Button size="small" variant="outlined" color="error" onClick={() => onDelete(todo.id)} style={{ marginLeft: '10px' }}>
@@ -25,6 +25,7 @@ function TodoItem({ todo, onDelete, onEdit }) {
         </Box>
     );
 }
+
 
 
 export default TodoItem;
