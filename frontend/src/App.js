@@ -1,14 +1,14 @@
 import React from 'react';
-import { Container, Typography, Box } from '@mui/material';
+import { Container, Typography } from '@mui/material';
 import TodoList from './components/TodoList';
 
 function App() {
   return (
-    <Container component="main" maxWidth="md">
-        <Typography variant="h4" component="h1" gutterBottom>
-          ToDo List
-        </Typography>
-        <TodoList />
+    <Container>
+      <Typography align='center' variant="h4" component="h1" sx={{ mt:2 , mb:2 }}>
+        ToDo List
+      </Typography>
+      <TodoList />
     </Container>
   );
 }

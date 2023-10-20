@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { fetchTodos } from '../api/todos';
-import { Alert, List, ListItem, ListItemText, CircularProgress, Typography } from '@mui/material';
+import { fetchTodos, deleteTodoById } from '../api/todos';
+import { Alert, CircularProgress, Typography, Stack } from '@mui/material';
+import TodoItem from './TodoItem';
 
 function TodoList() {
     const [todos, setTodos] = useState([]);
@@ -20,20 +21,36 @@ function TodoList() {
             });
     }, []);
 
+    const handleDelete = (id) => {
+        deleteTodoById(id)
+            .then(response => {
+                setTodos(response.data);
+                setLoading(false);
+            })
+            .catch(error => {
+                setError();
+                <Alert severity="error">{error.message}</Alert>
+                setLoading(false);
+            });
+    };
+
+    const handleEdit = (id) => {
+        // leave empty, not implemented yet, comming soon...
+    };
+
     return (
-        <div style={{ padding: '20px', maxWidth: '600px', margin: '0 auto' }}>
+        <div>
             {loading && <CircularProgress />}
             {error && <Typography variant="h6" color="error">Error: {error}</Typography>}
-            <List>
+
+            <Stack direction="column"
+                justifyContent="flex-start"
+                alignItems="center"
+                spacing={2}>
                 {todos.map(todo => (
-                    <ListItem key={todo.id} divider>
-                        <ListItemText
-                            primary={<Typography variant="h6">{todo.title}</Typography>}
-                            secondary={todo.description}
-                        />
-                    </ListItem>
+                    <TodoItem key={todo.id} todo={todo} onDelete={handleDelete} onEdit={handleEdit}/>
                 ))}
-            </List>
+            </Stack>
         </div>
     );
 }
