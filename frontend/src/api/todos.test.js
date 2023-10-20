@@ -13,13 +13,17 @@ describe('todos API', () => {
         mock.restore();
     });
 
+    test('Test env variable', () => {
+        process.env.REACT_APP_API_URL = 'http://localhost:8080';
+    })
+
     it('fetching todos was successfully!', async () => {
         const data = [{
             "id": 1,
             "title": "text",
             "description": "text"
         }];
-        mock.onGet('http://localhost:8080/api/todos').reply(200, data);
+        mock.onGet(`${process.env.REACT_APP_API_URL}/api/todos`).reply(200, data);
 
         const response = await fetchTodos();
 

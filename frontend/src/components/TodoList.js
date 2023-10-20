@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+//import { fetchTodos } from '../api/todos';
 
 function TodoList() {
-
     const [todos, setTodos] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        axios.get('http://localhost:8080/api/todos')
+        axios.get(`http://localhost:8080/api/todos`)
             .then(response => {
+                console.log(response);
                 setTodos(response.data);
                 setLoading(false);
             })
@@ -17,9 +18,8 @@ function TodoList() {
                 setError(error.message);
                 setLoading(false);
             });
-    }, []); // The empty array ensures this useEffect runs only once, similar to componentDidMount.
+    }, []);
 
-    // Your component logic will go here
     return (
         <div>
             {loading && <p>Loading...</p>}
