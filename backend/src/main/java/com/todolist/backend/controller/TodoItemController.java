@@ -23,7 +23,7 @@ public class TodoItemController {
         return todoItemService.findAll();
     }
 
-    @GetMapping("search")
+    @RequestMapping(method = RequestMethod.GET, path = "/search")
     public ResponseEntity<List<TodoItem>> searchTodoItem(@RequestParam(required = false) String title,
             @RequestParam(required = false) Integer id) {
         if (title == null && id == null) {
@@ -32,12 +32,12 @@ public class TodoItemController {
         return todoItemService.getTodoItem(title, id);
     }
 
-    @PostMapping("add")
+    @RequestMapping(method = RequestMethod.POST, path = "/add")
     public ResponseEntity<String> addToDoItem(@RequestBody TodoItem todoItem) {
         return todoItemService.addToDoItem(todoItem);
     }
 
-    @DeleteMapping("delete")
+    @RequestMapping(method = RequestMethod.DELETE, path = "/delete")
     public ResponseEntity<String> deleteTodoItem(@RequestParam(required = false) String title,
             @RequestParam(required = false) Integer id) {
         if (title == null && id == null) {
@@ -47,7 +47,7 @@ public class TodoItemController {
     }
 
     /*
-     * @PutMapping("/{id}")
+     * @RequestMapping(method = RequestMethod.DELETE, path = "/{id}")
      * public ResponseEntity<String> updateTodoItem(@PathVariable Integer id,
      * 
      * @RequestBody TodoItem todoItem) {
