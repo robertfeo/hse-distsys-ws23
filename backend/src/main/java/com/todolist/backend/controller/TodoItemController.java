@@ -12,12 +12,13 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/todos")
+@CrossOrigin(origins = "*")
 public class TodoItemController {
 
     @Autowired
     TodoItemService todoItemService;
 
-    @GetMapping
+    @RequestMapping(method = RequestMethod.GET, path = "")
     public ResponseEntity<List<TodoItem>> getAllTodos() {
         return todoItemService.findAll();
     }
