@@ -1,8 +1,8 @@
 import AxiosMockAdapter from 'axios-mock-adapter';
 import axios from 'axios';
-import { fetchTodos } from './todos';
+import { fetchTodos, deleteTodoByTitle, deleteTodoById } from './todos';
 
-describe('todos API', () => {
+describe('Tests APIs', () => {
     let mock;
 
     beforeEach(() => {
@@ -13,17 +13,13 @@ describe('todos API', () => {
         mock.restore();
     });
 
-    test('Test env variable', () => {
-        process.env.REACT_APP_API_URL = 'http://localhost:8080';
-    })
-
-    it('fetching todos was successfully!', async () => {
+    it('fetching list todos was successfull!', async () => {
         const data = [{
             "id": 1,
             "title": "text",
             "description": "text"
         }];
-        mock.onGet(`${process.env.REACT_APP_API_URL}/api/todos`).reply(200, data);
+        mock.onGet(`${process.env.REACT_APP_API_URL}/todos`).reply(200, data);
 
         const response = await fetchTodos();
 
@@ -41,6 +37,22 @@ describe('todos API', () => {
             expect(todo).toHaveProperty('description');
             expect(typeof todo.description).toBe('string');
         });
+    });
+
+    it('successfully deletes a todo by title', async () => {
+        const titleToDelete = "text";
+        mock.onDelete(`${process.env.REACT_APP_API_URL}/delete?title=${titleToDelete}`).reply(200);
+
+        const response = await deleteTodoByTitle(titleToDelete);
+        expect(response.status).toBe(200);
+    });
+
+    it('successfully deletes a todo by id', async () => {
+        const idToDelete = 1;
+        mock.onDelete(`${process.env.REACT_APP_API_URL}/delete?id=${idToDelete}`).reply(200);
+
+        const response = await deleteTodoById(idToDelete);
+        expect(response.status).toBe(200);
     });
 
     // other tests soon...
