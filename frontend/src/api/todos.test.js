@@ -2,7 +2,7 @@ import AxiosMockAdapter from 'axios-mock-adapter';
 import axios from 'axios';
 import { fetchTodos } from './todos';
 
-describe('todos API', () => {
+describe('Tests APIs', () => {
     let mock;
 
     beforeEach(() => {
@@ -13,17 +13,13 @@ describe('todos API', () => {
         mock.restore();
     });
 
-    test('Test env variable', () => {
-        process.env.REACT_APP_API_URL = 'http://localhost:8080';
-    })
-
-    it('fetching todos was successfully!', async () => {
+    it('fetching list todos was successfull!', async () => {
         const data = [{
             "id": 1,
             "title": "text",
             "description": "text"
         }];
-        mock.onGet(`${process.env.REACT_APP_API_URL}/api/todos`).reply(200, data);
+        mock.onGet(`${process.env.REACT_APP_API_URL}/todos`).reply(200, data);
 
         const response = await fetchTodos();
 

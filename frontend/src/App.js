@@ -1,16 +1,15 @@
-import './App.css';
+import React from 'react';
+import { Container, Typography, Box } from '@mui/material';
 import TodoList from './components/TodoList';
 
 function App() {
   return (
-    <>
-      <div>
-        <p>ToDo List App</p>
-      </div>
-      <div>
+    <Container component="main" maxWidth="md">
+        <Typography variant="h4" component="h1" gutterBottom>
+          ToDo List
+        </Typography>
         <TodoList />
-      </div>
-    </>
+    </Container>
   );
 }
 
