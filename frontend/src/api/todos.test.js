@@ -1,6 +1,6 @@
 import AxiosMockAdapter from 'axios-mock-adapter';
 import axios from 'axios';
-import { fetchTodos } from './todos';
+import { fetchTodos, deleteTodoByTitle, deleteTodoById } from './todos';
 
 describe('Tests APIs', () => {
     let mock;
@@ -37,6 +37,22 @@ describe('Tests APIs', () => {
             expect(todo).toHaveProperty('description');
             expect(typeof todo.description).toBe('string');
         });
+    });
+
+    it('successfully deletes a todo by title', async () => {
+        const titleToDelete = "text";
+        mock.onDelete(`${process.env.REACT_APP_API_URL}/delete?title=${titleToDelete}`).reply(200);
+
+        const response = await deleteTodoByTitle(titleToDelete);
+        expect(response.status).toBe(200);
+    });
+
+    it('successfully deletes a todo by id', async () => {
+        const idToDelete = 1;
+        mock.onDelete(`${process.env.REACT_APP_API_URL}/delete?id=${idToDelete}`).reply(200);
+
+        const response = await deleteTodoById(idToDelete);
+        expect(response.status).toBe(200);
     });
 
     // other tests soon...

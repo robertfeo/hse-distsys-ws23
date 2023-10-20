@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { fetchTodos, deleteTodoById } from '../api/todos';
-import { Alert, CircularProgress, Typography, Stack } from '@mui/material';
+import { Alert, CircularProgress, Typography, Stack, Container } from '@mui/material';
 import TodoItem from './TodoItem';
 
 function TodoList() {
@@ -15,7 +15,7 @@ function TodoList() {
                 setLoading(false);
             })
             .catch(error => {
-                setError();
+                setError(error.message);
                 <Alert severity="error">{error.message}</Alert>
                 setLoading(false);
             });
@@ -23,8 +23,12 @@ function TodoList() {
 
     const handleDelete = (id) => {
         deleteTodoById(id)
-            .then(response => {
-                setTodos(response.data);
+            .then(() => {
+                console.log(`Todo with id ${id} deleted successfully.`);
+                fetchTodos().then(response => {
+                    const updatedTodos = response.data.filter(t => t.id !== id);
+                    setTodos(updatedTodos);
+                })
                 setLoading(false);
             })
             .catch(error => {
@@ -39,19 +43,19 @@ function TodoList() {
     };
 
     return (
-        <div>
+        <Container bgcolor="#e8eaf6">
             {loading && <CircularProgress />}
             {error && <Typography variant="h6" color="error">Error: {error}</Typography>}
 
             <Stack direction="column"
-                justifyContent="flex-start"
+                justifyContent="flex-end"
                 alignItems="center"
                 spacing={2}>
                 {todos.map(todo => (
-                    <TodoItem key={todo.id} todo={todo} onDelete={handleDelete} onEdit={handleEdit}/>
+                    <TodoItem key={todo.id} todo={todo} onDelete={handleDelete} onEdit={handleEdit} />
                 ))}
             </Stack>
-        </div>
+        </Container>
     );
 }
 
