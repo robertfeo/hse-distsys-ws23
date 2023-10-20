@@ -1,9 +1,9 @@
 import axios from 'axios';
 
-const API_URL = "http://backend:8080/api/todos"; // Using the Docker container name for service resolution.
+const API_URL = "http://localhost:8080"; // Using the Docker container name for service resolution.
 
 export const fetchTodos = () => {
-    return axios.get(API_URL);
+    return axios.get(`${API_URL}/api/todos`);
 };
 
 export const addTodo = (data) => {
