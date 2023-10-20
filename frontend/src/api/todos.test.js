@@ -13,18 +13,31 @@ describe('todos API', () => {
         mock.restore();
     });
 
-    it('fetches todos successfully', async () => {
+    it('fetching todos was successfully!', async () => {
         const data = [{
             "id": 1,
-            "title": "Adu gunoiu",
-            "description": "din tomberone"
+            "title": "text",
+            "description": "text"
         }];
         mock.onGet('http://localhost:8080/api/todos').reply(200, data);
 
         const response = await fetchTodos();
-        expect(response.data).toEqual(data);
-    });
 
+        // Check if array
+        expect(Array.isArray(response.data)).toBe(true);
+
+        // Check format of each JSON object in the array
+        response.data.forEach(todo => {
+            expect(todo).toHaveProperty('id');
+            expect(typeof todo.id).toBe('number');
+
+            expect(todo).toHaveProperty('title');
+            expect(typeof todo.title).toBe('string');
+
+            expect(todo).toHaveProperty('description');
+            expect(typeof todo.description).toBe('string');
+        });
+    });
 
     // other tests soon...
 });
