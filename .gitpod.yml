@@ -7,7 +7,6 @@ tasks:
       cd ..
       docker-compose up -d
       npm install -g npm@10.2.1
-      npm install --global yarn
       cd frontend/
-      npm install
+      npm install --silent
       cd ..
