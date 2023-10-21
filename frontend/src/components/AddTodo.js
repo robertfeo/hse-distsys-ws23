@@ -1,31 +1,56 @@
 import React, { useState } from 'react';
-import axios from 'axios';
-import { Button, TextField, Container, Box } from '@mui/material';
+import { Button, TextField, Container, Box, Alert, CircularProgress } from '@mui/material';
+import { addTodo } from '../api/todos';
 
-const AddTodo = () => {
+const AddTodo = (props) => {
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
+    const [alertMessage, setAlertMessage] = useState(null);
+    const [alertType, setAlertType] = useState(null);
 
-    const handleAddTodo = async () => {
-        try {
-            const response = await axios.post('http://backend:8080/api/todos/add', { title, description });
-            if (response.status === 200) {
-                // Clear the input fields after successful addition
-                setTitle("");
-                setDescription("");
-                alert("ToDo item added successfully!");
-            } else {
-                alert("Failed to add the ToDo item. Please try again.");
-            }
-        } catch (error) {
-            console.error("Error adding ToDo:", error);
-            alert("Failed to add the ToDo item. Please try again.");
+    const { loading, refreshTodos } = props;
+
+    const handleAddTodo = (title, description) => {
+        var todoData;
+
+        if (!title) {
+            setAlertType('error');
+            setAlertMessage('Title is required!');
+            setTimeout(() => {
+                setAlertMessage(null);
+                setAlertType(null);
+            }, 3000);
+            return;
+        } else {
+            todoData = {
+                title: title,
+                description: description
+            };
         }
+
+        addTodo(todoData)
+            .then(() => {
+                setAlertType('success');
+                setAlertMessage('ToDo added successfully!');
+                refreshTodos();  // This should refresh the todos in App.js
+                setTimeout(() => {
+                    setAlertMessage(null);
+                    setAlertType(null);
+                }, 3000);
+            })
+            .catch(error => {
+                setAlertType('error');
+                setAlertMessage(error.message);
+                setTimeout(() => {
+                    setAlertMessage(null);
+                    setAlertType(null);
+                }, 3000);
+            });
     };
 
     return (
-        <Container maxWidth="sm" bgcolor="#e8eaf6" sx={{ marginBottom: 2 }}>
-            <Box bgcolor="#e8eaf6" component="form" noValidate sx={{ mt: 3}}>
+        <Container maxWidth="sm" bgcolor="#e8eaf6" sx={{ mb: 2 }}>
+            <Box bgcolor="#e8eaf6" component="form" noValidate sx={{ mt: 3, maxWidth: 500, mb: 2 }}>
                 <TextField
                     margin="normal"
                     size='small'
@@ -52,11 +77,14 @@ const AddTodo = () => {
                     variant="contained"
                     color="primary"
                     sx={{ mt: 3, mb: 2 }}
-                    onClick={handleAddTodo}
+                    onClick={() => handleAddTodo(title, description)}
                 >
                     Add ToDo
                 </Button>
             </Box>
+
+            {loading && <CircularProgress />}
+            {alertMessage && <Alert severity={alertType}>{alertMessage}</Alert>}
         </Container>
     );
 }

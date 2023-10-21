@@ -1,39 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import { fetchTodos, deleteTodoById } from '../api/todos';
-import { Alert, CircularProgress, Typography, Stack, Container } from '@mui/material';
+import React, { useState } from 'react';
+import { deleteTodoById } from '../api/todos';
+import { Typography, Stack, Container } from '@mui/material';
 import TodoItem from './TodoItem';
 
-function TodoList() {
-    const [todos, setTodos] = useState([]);
-    const [loading, setLoading] = useState(true);
+function TodoList(props) {
     const [error, setError] = useState(null);
 
-    useEffect(() => {
-        fetchTodos()
-            .then(response => {
-                setTodos(response.data);
-                setLoading(false);
-            })
-            .catch(error => {
-                setError(error.message);
-                <Alert severity="error">{error.message}</Alert>
-                setLoading(false);
-            });
-    }, []);
+    const { todos, refreshTodos } = props;
 
     const handleDelete = (id) => {
         deleteTodoById(id)
             .then(() => {
-                fetchTodos().then(response => {
-                    const updatedTodos = response.data.filter(t => t.id !== id);
-                    setTodos(updatedTodos);
-                })
-                setLoading(false);
+                refreshTodos();
             })
             .catch(error => {
-                setError();
-                <Alert severity="error">{error.message}</Alert>
-                setLoading(false);
+                setError(error.message);
             });
     };
 
@@ -43,7 +24,6 @@ function TodoList() {
 
     return (
         <Container bgcolor="#e8eaf6">
-            {loading && <CircularProgress />}
             {error && <Typography variant="h6" color="error">Error: {error}</Typography>}
 
             <Stack direction="column"
