@@ -16,10 +16,11 @@ import java.util.Arrays;
 public class WebSecurityConfig {
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.cors().and()
-        // ... other configurations
-        ;
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+                .cors(cors -> {
+                })
+                .authorizeRequests(authorizeRequests -> authorizeRequests.anyRequest().permitAll());
         return http.build();
     }
 
