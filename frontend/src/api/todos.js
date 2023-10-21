@@ -23,3 +23,7 @@ export const searchTodoByTitle = (title) => {
 export const searchTodoById = (id) => {
     return axios.get(`${process.env.REACT_APP_API_URL}/todos/search?id=${id}`);
 };
+
+export const editTodoById = (id, title) => {
+    return axios.get(`${process.env.REACT_APP_API_URL}/todos/edit?id=${id}`);
+};
