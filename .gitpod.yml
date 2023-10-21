@@ -10,3 +10,4 @@ tasks:
       npm install --global yarn
       cd frontend/
       npm install
+      cd ..
