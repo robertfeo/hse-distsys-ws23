@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/todos")
-@CrossOrigin(origins = {"http://backend:3000", "http://localhost:3000"}, methods = {
+@CrossOrigin(origins = {"http://backend:3000/api", "http://localhost:3000/api"}, methods = {
     RequestMethod.GET, RequestMethod.POST, RequestMethod.DELETE, RequestMethod.PUT })
 public class TodoItemController {
 
