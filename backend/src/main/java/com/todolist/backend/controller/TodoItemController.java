@@ -8,12 +8,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-
-
 @RestController
 @RequestMapping("/api/todos")
-@CrossOrigin(origins = "*", allowedHeaders = "*", maxAge = 9000, allowCredentials = "true", methods = {
-        RequestMethod.GET, RequestMethod.POST, RequestMethod.DELETE, RequestMethod.PUT })
+@CrossOrigin(origins = {"http://backend:3000", "http://localhost:3000"}, methods = {
+    RequestMethod.GET, RequestMethod.POST, RequestMethod.DELETE, RequestMethod.PUT })
 public class TodoItemController {
 
     @Autowired
