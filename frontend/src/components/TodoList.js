@@ -24,7 +24,6 @@ function TodoList() {
     const handleDelete = (id) => {
         deleteTodoById(id)
             .then(() => {
-                console.log(`Todo with id ${id} deleted successfully.`);
                 fetchTodos().then(response => {
                     const updatedTodos = response.data.filter(t => t.id !== id);
                     setTodos(updatedTodos);
