@@ -41,7 +41,7 @@ describe('Tests APIs', () => {
 
     it('successfully deletes a todo by title', async () => {
         const titleToDelete = "text";
-        mock.onDelete(`${process.env.REACT_APP_API_URL}/delete?title=${titleToDelete}`).reply(200);
+        mock.onDelete(`${process.env.REACT_APP_API_URL}/todos/delete?title=${titleToDelete}`).reply(200);
 
         const response = await deleteTodoByTitle(titleToDelete);
         expect(response.status).toBe(200);
@@ -49,7 +49,7 @@ describe('Tests APIs', () => {
 
     it('successfully deletes a todo by id', async () => {
         const idToDelete = 1;
-        mock.onDelete(`${process.env.REACT_APP_API_URL}/delete?id=${idToDelete}`).reply(200);
+        mock.onDelete(`${process.env.REACT_APP_API_URL}/todos/delete?id=${idToDelete}`).reply(200);
 
         const response = await deleteTodoById(idToDelete);
         expect(response.status).toBe(200);
