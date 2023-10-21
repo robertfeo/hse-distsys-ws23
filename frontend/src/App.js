@@ -10,8 +10,6 @@ function App() {
   const [todos, setTodos] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  addDummyData();
-
   useEffect(() => {
     fetchTodos()
       .then(response => {
