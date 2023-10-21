@@ -23,9 +23,9 @@
     "web-vitals": "^3.5.0"
   },
   "scripts": {
-    "start": "env-cmd -f ./.env.production.local react-scripts start",
+    "start": "env-cmd -f ./.env.local react-scripts start",
     "build": "react-scripts build",
-    "build:local": "env-cmd -f ./.env.production.local npm run build",
+    "build:local": "env-cmd -f ./.env.local npm run build",
     "build:production": "env-cmd -f ./.env.production npm run build",
     "eject": "react-scripts eject",
     "test": "jest"
