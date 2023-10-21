@@ -4,7 +4,6 @@ import { fetchTodos } from './api/todos';
 import { Container, Typography } from '@mui/material';
 import TodoList from './components/TodoList';
 import AddTodo from './components/AddTodo';
-import addDummyData from './utils/feedData';
 
 function App() {
   const [todos, setTodos] = useState([]);
