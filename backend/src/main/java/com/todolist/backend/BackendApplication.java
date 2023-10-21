@@ -2,10 +2,6 @@ package com.todolist.backend;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
 
 @SpringBootApplication
 public class BackendApplication {
@@ -13,7 +9,7 @@ public class BackendApplication {
 		SpringApplication.run(BackendApplication.class, args);
 	}
 
-	@Bean
+	/* @Bean
 	public CorsFilter corsFilter() {
 		final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		final CorsConfiguration config = new CorsConfiguration();
@@ -29,5 +25,5 @@ public class BackendApplication {
 		config.addAllowedMethod("PATCH");
 		source.registerCorsConfiguration("/**", config);
 		return new CorsFilter(source);
-	}
+	} */
 }
