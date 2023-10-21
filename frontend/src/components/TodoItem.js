@@ -47,7 +47,7 @@ const TodoItem = ({ searchTerm, item, onEditTodoItem, refreshTodos }) => {
                     type='button'
                     className={clsx(
                         'flex h-10 w-10 items-center justify-center rounded-lg bg-rose-700',
-                        'hover:bg-rose-800 focus:outline-none focus:ring-4 focus:ring-rose-300',
+                        'hover:bg-rose-800 focus:no-underline focus:outline-none',
                     )}
                 >
                     <DeleteIcon />
@@ -58,7 +58,7 @@ const TodoItem = ({ searchTerm, item, onEditTodoItem, refreshTodos }) => {
                     type='button'
                     className={clsx(
                         'flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-700',
-                        'hover:bg-indigo-800 focus:outline-none focus:ring-4 focus:ring-indigo-300',
+                        'hover:bg-indigo-800 focus:no-underline focus:outline-none',
                     )}
                 >
                     <EditIcon />
@@ -70,7 +70,7 @@ const TodoItem = ({ searchTerm, item, onEditTodoItem, refreshTodos }) => {
                     className={clsx(
                         item.isChecked ? 'bg-emerald-700' : 'bg-gray-400',
                         'flex h-10 w-10 items-center justify-center rounded-lg',
-                        'hover:bg-emerald-800 focus:outline-none focus:ring-4 focus:ring-emerald-300',
+                        'hover:bg-emerald-800 focus:no-underline focus:outline-none',
                     )}
                 >
                     <CheckIcon />
