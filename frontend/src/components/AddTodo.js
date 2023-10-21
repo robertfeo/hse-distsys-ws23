@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, TextField, Container, Box, Alert, CircularProgress } from '@mui/material';
+import { Button, TextField, Alert, CircularProgress } from '@mui/material';
 import { addTodo } from '../api/todos';
 
 const AddTodo = (props) => {
@@ -49,8 +49,8 @@ const AddTodo = (props) => {
     };
 
     return (
-        <Container maxWidth="sm" bgcolor="#e8eaf6" sx={{ mb: 2 }}>
-            <Box bgcolor="#e8eaf6" component="form" noValidate sx={{ mt: 3, maxWidth: 500, mb: 2 }}>
+        <>
+            <div className="rounded-xl border border-white bg-white/75 py-4 px-6 shadow-lg shadow-black/5 saturate-200 backdrop-blur-sm">
                 <TextField
                     margin="normal"
                     size='small'
@@ -81,11 +81,11 @@ const AddTodo = (props) => {
                 >
                     Add ToDo
                 </Button>
-            </Box>
+                {loading && <CircularProgress />}
+                {alertMessage && <Alert severity={alertType}>{alertMessage}</Alert>}
+            </div>
+        </>
 
-            {loading && <CircularProgress />}
-            {alertMessage && <Alert severity={alertType}>{alertMessage}</Alert>}
-        </Container>
     );
 }
 

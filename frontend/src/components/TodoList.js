@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { deleteTodoById } from '../api/todos';
-import { Typography, Stack, Container } from '@mui/material';
 import TodoItem from './TodoItem';
 
 function TodoList(props) {
-    const [error, setError] = useState(null);
+    const [setError] = useState(null);
 
     const { todos, refreshTodos } = props;
 
@@ -23,18 +22,14 @@ function TodoList(props) {
     };
 
     return (
-        <Container bgcolor="#e8eaf6">
-            {error && <Typography variant="h6" color="error">Error: {error}</Typography>}
-
-            <Stack direction="column"
-                justifyContent="flex-end"
-                alignItems="center"
-                spacing={2}>
-                {todos.map(todo => (
+        <>
+            {todos.map(todo => (
+                <div key={todo.id} className="rounded-xl border border-white bg-white/75 py-4 px-6 shadow-lg shadow-black/5 saturate-200 backdrop-blur-sm">
                     <TodoItem key={todo.id} todo={todo} onDelete={handleDelete} onEdit={handleEdit} />
-                ))}
-            </Stack>
-        </Container>
+                </div>
+            ))}
+        </>
+
     );
 }
 

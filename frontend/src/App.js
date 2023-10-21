@@ -1,9 +1,15 @@
+/* eslint-disable jsx-a11y/alt-text */
 // App.js
-import React, { useState, useEffect } from 'react';
-import { fetchTodos } from './api/todos';
-import { Container, Typography } from '@mui/material';
-import TodoList from './components/TodoList';
-import AddTodo from './components/AddTodo';
+import React, { useState, useEffect } from "react";
+import { fetchTodos } from "./api/todos";
+
+import TodoList from "./components/TodoList";
+import AddTodo from "./components/AddTodo";
+import { Footer } from "./components/Footer";
+import { Spinner } from "@material-tailwind/react";
+import Heading from "./components/Heading";
+import clsx from 'clsx';
+import { SearchIcon } from '@./components/icons';
 
 function App() {
   const [todos, setTodos] = useState([]);
@@ -11,12 +17,12 @@ function App() {
 
   useEffect(() => {
     fetchTodos()
-      .then(response => {
+      .then((response) => {
         setTodos(response.data);
-        setLoading(true);
+        setLoading(false);
       })
-      .catch(error => {
-        console.error('There was an error fetching the todos', error);
+      .catch((error) => {
+        console.error("There was an error fetching the todos", error);
         setLoading(false);
       });
   }, []);
@@ -24,24 +30,33 @@ function App() {
   const refreshTodos = () => {
     setLoading(true);
     fetchTodos()
-      .then(response => {
+      .then((response) => {
         setTodos(response.data);
         setLoading(false);
       })
-      .catch(error => {
-        console.error('There was an error fetching the todos', error);
+      .catch((error) => {
+        console.error("There was an error fetching the todos", error);
         setLoading(false);
       });
   };
 
   return (
-    <Container>
-      <Typography align='center' variant="h4" component="h1" sx={{ mt: 2, mb: 2 }}>
-        ToDo List
-      </Typography>
-      <AddTodo refreshTodos={refreshTodos} />
-      <TodoList todos={todos} loading={loading} refreshTodos={refreshTodos} />
-    </Container>
+    <>
+      {
+        loading ? (
+          <div className="absolute flex h-screen" >
+            <Spinner color="blue" />
+          </div>
+        ) : null
+      }
+      <div className="flex flex-col justify-center items-center h-screen">
+        <AddTodo refreshTodos={refreshTodos} />
+        <TodoList todos={todos} refreshTodos={refreshTodos} />
+        <div className="absolute bottom-0 w-full">
+          <Footer />
+        </div>
+      </div>
+    </>
   );
 }
 
