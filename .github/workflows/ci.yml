@@ -18,10 +18,8 @@ jobs:
   deploy:
     needs: build 
     runs-on: ubuntu-latest
-    
     steps:
     - name: Check out code 🛎
     - uses: actions/checkout@v2
-    
     - name: Deploy with docker-compose
       run: docker-compose up -d
