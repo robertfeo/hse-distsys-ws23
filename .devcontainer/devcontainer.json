@@ -1,0 +1,9 @@
+{
+    "name": "Dev Codespace",
+    // Your code path from the .devcontainer directory
+    "workspaceFolder": ".",
+    // List of ports that you want to preview
+    "forwardPorts": [3000, 8080, 5678],
+    // Script to run to bootstrap the app when the space is created
+    "postCreateCommand": ". init_github_codespace.sh"
+}
