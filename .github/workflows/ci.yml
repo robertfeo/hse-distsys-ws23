@@ -11,8 +11,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: List directory
-        run: ls -la
+      - name: Set up JDK 17
+        uses: actions/setup-java@v2
+        with:
+          distribution: "adopt"
+          java-version: "17"
 
       - name: Build using Maven
         working-directory: backend
