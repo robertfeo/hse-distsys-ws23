@@ -1,12 +1,16 @@
 {
-  "image": "mcr.microsoft.com/devcontainers/universal:2",
-  "features": {
-    "ghcr.io/devcontainers/features/java:1": {
-			"version": "17",
-			"installMaven": "false",
-			"installGradle": "false"
-		},
-    "ghcr.io/devcontainers/features/docker-in-docker:2": {},
-    "ghcr.io/devcontainers/features/node:1": {}
-  }
+  "image": "mcr.microsoft.com/devcontainers/universal:latest",
+  "customizations": {
+    "vscode": {
+      "java.compile.nullAnalysis.mode": "automatic",
+      "java.configuration.updateBuildConfiguration": "automatic",
+      "githubPullRequests.ignoredPullRequestBranches": ["main"],
+      "git.ignoreLimitWarning": true,
+      "yaml.schemas": {
+        "https://json.schemastore.org/sourcehut-build-0.41.2.json": "file:///workspaces/hse-distsys-ws23/.github/workflows.yml"
+      }
+    }
+  },
+  "features": {},
+  "postCreateCommand": "bash init_github_codespace.sh"
 }
