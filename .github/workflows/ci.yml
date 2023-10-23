@@ -8,13 +8,19 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - name: Build using Maven
-      working-directory: backend
-      run: mvn clean install
-      
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: List directory
+        run: ls -la
+
+      - name: Build using Maven
+        working-directory: backend
+        run: mvn clean install
+
   deploy:
     needs: build
     runs-on: ubuntu-latest
     steps:
-    - name: Deploy with docker-compose
-      run: docker-compose up -d
+      - name: Deploy with docker-compose
+        run: docker-compose up -d
