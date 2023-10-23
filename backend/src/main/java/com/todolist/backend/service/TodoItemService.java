@@ -1,17 +1,18 @@
 package com.todolist.backend.service;
 
-import com.todolist.backend.model.TodoItem;
-import com.todolist.backend.repository.TodoItemDao;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+
+import com.todolist.backend.model.TodoItem;
+import com.todolist.backend.repository.TodoItemDao;
 
 @Service
 public class TodoItemService {
@@ -77,6 +78,18 @@ public class TodoItemService {
         } catch (Exception e) {
             logger.error("Error deleting TodoItem: ", e);
             return new ResponseEntity<>("Error deleting TodoItem.", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    public ResponseEntity<TodoItem> updateTodoItem(Integer id, String title) {
+        Optional<TodoItem> todoItem = todoItemDao.findById(id);
+        if (todoItem.isPresent()) {
+            TodoItem existingItem = todoItem.get();
+            existingItem.setTitle(title);
+            todoItemDao.save(existingItem);
+            return ResponseEntity.ok(existingItem);
+        } else {
+            return ResponseEntity.notFound().build();
         }
     }
 
