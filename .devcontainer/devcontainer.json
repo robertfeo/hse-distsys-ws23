@@ -1,7 +1,10 @@
 {
-  "image": "mcr.microsoft.com/devcontainers/universal:latest",
+  "image": "mcr.microsoft.com/devcontainers/universal:2-linux",
   "customizations": {
     "vscode": {
+      "settings": {
+        "extensions.verifySignature": false
+      },
       "java.compile.nullAnalysis.mode": "automatic",
       "java.configuration.updateBuildConfiguration": "automatic",
       "githubPullRequests.ignoredPullRequestBranches": ["main"],
@@ -11,6 +14,7 @@
       }
     }
   },
+  "forwardPorts": [8080,3000,5432],
   "features": {},
   "postCreateCommand": "bash init_github_codespace.sh"
 }

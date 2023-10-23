@@ -13,7 +13,7 @@ services:
     networks:
       - todolist-network
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/todolist
+      SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/todo_item
   database:
     container_name: database
     image: img-database
