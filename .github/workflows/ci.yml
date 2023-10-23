@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Build using Maven
-      working-directory: ./backend
+      working-directory: backend
       run: mvn clean install
       
   deploy:
