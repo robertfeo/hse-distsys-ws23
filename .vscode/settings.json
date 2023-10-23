@@ -4,5 +4,8 @@
     "githubPullRequests.ignoredPullRequestBranches": [
         "main"
     ],
-    "git.ignoreLimitWarning": true
+    "git.ignoreLimitWarning": true,
+    "yaml.schemas": {
+        "https://json.schemastore.org/sourcehut-build-0.41.2.json": "file:///workspaces/hse-distsys-ws23/.github/workflows.yml"
+    }
 }
