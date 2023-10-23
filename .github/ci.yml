@@ -1,0 +1,15 @@
+name: ci
+on: push
+  push:
+    branches:
+      - dev
+
+jobs:
+  test-http:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Check out code 🛎
+        uses: actions/checkout@v2
+        
+      - name: Run docker-compose
+        run: docker-compose up -d
