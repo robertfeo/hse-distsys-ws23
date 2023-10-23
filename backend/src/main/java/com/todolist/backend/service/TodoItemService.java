@@ -92,21 +92,4 @@ public class TodoItemService {
             return ResponseEntity.notFound().build();
         }
     }
-
-    /*
-     * public ResponseEntity<String> updateTodoItem(Integer id, TodoItem
-     * updatedTodoItem) {
-     * Optional<TodoItem> todoItem = todoItemDao.findById(id);
-     * if (todoItem.isPresent()) {
-     * TodoItem existingItem = todoItem.get();
-     * existingItem.setTitle(updatedTodoItem.getTitle());
-     * existingItem.setDescription(updatedTodoItem.getDescription());
-     * existingItem.setStatus(updatedTodoItem.isStatus());
-     * todoItemDao.save(existingItem);
-     * return ResponseEntity.ok("Todo item updated");
-     * } else {
-     * return ResponseEntity.notFound().build();
-     * }
-     * }
-     */
 }

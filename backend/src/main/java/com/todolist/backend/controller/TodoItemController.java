@@ -50,15 +50,6 @@ public class TodoItemController {
         return todoItemService.deleteTodoItem(title, id);
     }
 
-    /*
-     * @RequestMapping(method = RequestMethod.DELETE, path = "/{id}")
-     * public ResponseEntity<String> updateTodoItem(@PathVariable Integer id,
-     * 
-     * @RequestBody TodoItem todoItem) {
-     * return todoItemService.updateTodoItem(id, todoItem);
-     * }
-     */
-
     @RequestMapping(method = RequestMethod.PUT, path = "/update/{id}/{title}")
     public ResponseEntity<TodoItem> updateTodoItem(@PathVariable Integer id, @PathVariable String title) {
         return todoItemService.updateTodoItem(id, title);
