@@ -101,13 +101,8 @@ public class TodoItemService {
         if (todoItemOptional.isPresent()) {
             TodoItem existingItem = todoItemOptional.get();
             TodoItem updatedTodo = converter.convertToEntity(todoItemDto);
-            if (updatedTodo.isChecked() != existingItem.isChecked()) {
-                existingItem.setChecked(updatedTodo.isChecked());
-            } else if (updatedTodo.getTitle() != null && !updatedTodo.getTitle().equals(existingItem.getTitle())) {
-                existingItem.setTitle(updatedTodo.getTitle());
-            } else {
-                return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-            }
+            existingItem.setChecked(updatedTodo.isChecked());
+            existingItem.setTitle(updatedTodo.getTitle());
             todoItemDao.save(existingItem);
             return new ResponseEntity<>(existingItem, HttpStatus.OK);
         } else {

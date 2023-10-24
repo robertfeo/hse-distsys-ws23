@@ -60,7 +60,7 @@ public class TodoItemController {
      * }
      */
 
-    @RequestMapping(value = "/update/{id}", method = RequestMethod.PATCH, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(path = "/update/{id}", method = RequestMethod.PATCH, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TodoItem> updateTodoItem(@PathVariable("id") Integer id,
             @RequestBody TodoItemDto updateRequest) {
         return todoItemService.updateTodoItemState(id, updateRequest);
