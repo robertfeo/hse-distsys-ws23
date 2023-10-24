@@ -11,10 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import com.todolist.backend.dto.TodoItemDto;
 import com.todolist.backend.model.TodoItem;
 import com.todolist.backend.repository.TodoItemDao;
-import com.todolist.backend.utils.Converter;
 
 @Service
 public class TodoItemService {
@@ -83,7 +81,7 @@ public class TodoItemService {
         }
     }
 
-    public ResponseEntity<TodoItem> updateTodoItem(Integer id, String title) {
+    /* public ResponseEntity<TodoItem> updateTodoItem(Integer id, String title) {
         Optional<TodoItem> todoItem = todoItemDao.findById(id);
         if (todoItem.isPresent()) {
             TodoItem existingItem = todoItem.get();
@@ -93,16 +91,17 @@ public class TodoItemService {
         } else {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
-    }
+    } */
 
-    public ResponseEntity<TodoItem> updateTodoItemState(Integer id, TodoItemDto todoItemDto) {
-        Optional<TodoItem> todoItemOptional = todoItemDao.findById(id);
-        Converter converter = new Converter();
-        if (todoItemOptional.isPresent()) {
-            TodoItem existingItem = todoItemOptional.get();
-            TodoItem updatedTodo = converter.convertToEntity(todoItemDto);
-            existingItem.setChecked(updatedTodo.isChecked());
-            existingItem.setTitle(updatedTodo.getTitle());
+    public ResponseEntity<TodoItem> updateTodoItem(Integer id, TodoItem newTodoItem) {
+        Optional<TodoItem> todoItem = todoItemDao.findById(id);
+        boolean isTitle = newTodoItem.getTitle() != null;
+        if (todoItem.isPresent()) {
+            TodoItem existingItem = todoItem.get();
+            if (isTitle) {
+                existingItem.setTitle(newTodoItem.getTitle());
+            }
+            existingItem.setChecked(newTodoItem.isChecked());
             todoItemDao.save(existingItem);
             return new ResponseEntity<>(existingItem, HttpStatus.OK);
         } else {
