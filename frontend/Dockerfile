@@ -1,9 +1,6 @@
 # Node.js base image
 FROM node:16-alpine
 
-# Install latest npm version
-RUN npm install -g npm@10.2.1
-
 # Setup working directory
 WORKDIR /app
 
