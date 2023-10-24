@@ -14,6 +14,7 @@ services:
       - todolist-network
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/todolist
+    restart: unless-stopped
   database:
     container_name: database
     image: img-database
@@ -28,6 +29,7 @@ services:
       - db-data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+    restart: unless-stopped
     networks:
       - todolist-network
   frontend:
@@ -40,6 +42,7 @@ services:
       - "3000:3000"
     depends_on:
       - backend
+    restart: unless-stopped
     networks:
       - todolist-network
 
