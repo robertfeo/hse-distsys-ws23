@@ -48,9 +48,6 @@ services:
     image: img-frontend
     ports:
       - "3000:3000"
-    depends_on:
-      backend:
-        condition: service_healthy
     restart: unless-stopped
     networks:
       - todolist-network
