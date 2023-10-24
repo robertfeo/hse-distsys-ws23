@@ -8,6 +8,9 @@ WORKDIR /app
 # Utilizes Docker cache to speed up subsequent builds
 COPY package*.json ./
 
+# Install latest npm version
+RUN npm install -g npm@10.2.1
+
 # Install dependencies
 RUN npm install
 
