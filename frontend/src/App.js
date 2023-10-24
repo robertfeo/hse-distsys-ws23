@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
+import clsx from 'clsx';
+import React, { useEffect, useState } from "react";
 import { fetchTodos } from "./api/todos";
 import Heading from "./components/Heading";
-import clsx from 'clsx';
-import SearchIcon from './components/icons/SearchIcon';
-import ToggleButton from './components/ToggleButton';
-import TodoPopup from './components/TodoPopup';
 import TodoItem from './components/TodoItem';
+import TodoPopup from './components/TodoPopup';
+import ToggleButton from './components/ToggleButton';
+import SearchIcon from './components/icons/SearchIcon';
 
 function App() {
   const [todos, setTodos] = useState([]);
@@ -108,7 +108,7 @@ function App() {
                   onClick={() =>
                     handleOpenTodoPopup(null, {
                       value: '',
-                      isChecked: false,
+                      checked: false,
                     })
                   }
                   type='button'
@@ -126,9 +126,9 @@ function App() {
             <div className='py-2'>
 
 
-              {/* For incomplete todos */}
+              {/* Für unerledigte TODOs */}
               {filteredTodos?.map((item, index) => {
-                if (!item.isChecked) {
+                if (!item.checked) {
                   return getTodoItem(index, item, refreshTodos);
                 }
                 return null;
@@ -138,21 +138,20 @@ function App() {
                 onToggle={() => setIsShowCompletedTodos(!isShowCompletedTodos)}
                 todosAmount={
                   todos?.filter(
-                    (item) => item.isChecked && item.value.includes(searchTerm),
+                    (item) => item.checked && item.title.includes(searchTerm),
                   ).length || 0
                 }
                 isShow={isShowCompletedTodos}
               />
 
-              {/* For complete todos */}
+              {/* Für erledigte TODOs */}
               {isShowCompletedTodos &&
                 filteredTodos?.map((item, index) => {
-                  if (item.isChecked) {
+                  if (item.checked) {
                     return getTodoItem(index, item);
                   }
                   return null;
                 })}
-
             </div>
           </div>
         </div>

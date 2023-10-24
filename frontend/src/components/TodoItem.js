@@ -1,9 +1,9 @@
+import clsx from 'clsx';
 import React from 'react';
+import { deleteTodoById, updateTodoById } from '../api/todos';
+import CheckIcon from './icons/CheckIcon';
 import DeleteIcon from './icons/DeleteIcon';
 import EditIcon from './icons/EditIcon';
-import CheckIcon from './icons/CheckIcon';
-import clsx from 'clsx';
-import { deleteTodoById, editTodoById } from '../api/todos';
 
 const TodoItem = ({ searchTerm, item, onEditTodoItem, refreshTodos }) => {
     const handleRemoveTodoItem = () => {
@@ -17,7 +17,8 @@ const TodoItem = ({ searchTerm, item, onEditTodoItem, refreshTodos }) => {
     };
 
     const handleCheckTodoItem = () => {
-        editTodoById(item.id, !item.isChecked)
+        item.checked = !item.checked;
+        updateTodoById(item.id, item)
             .then(() => {
                 refreshTodos();
             })
@@ -68,7 +69,7 @@ const TodoItem = ({ searchTerm, item, onEditTodoItem, refreshTodos }) => {
                     onClick={handleCheckTodoItem}
                     type='button'
                     className={clsx(
-                        item.isChecked ? 'bg-emerald-700' : 'bg-gray-400',
+                        item.checked ? 'bg-emerald-700' : 'bg-gray-400',
                         'flex h-10 w-10 items-center justify-center rounded-lg',
                         'hover:bg-emerald-800 focus:no-underline focus:outline-none',
                     )}

@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
 import clsx from 'clsx';
-import { addTodo } from '../api/todos';
-import { editTodoById } from '../api/todos';
+import React, { useState } from 'react';
+import { addTodo, updateTodoById } from '../api/todos';
 
 const TodoPopup = ({ onClosePopup, index, data, refreshTodos }) => {
     const [todoValue, setTodoValue] = useState(data?.value || '');
@@ -30,10 +29,10 @@ const TodoPopup = ({ onClosePopup, index, data, refreshTodos }) => {
             if (todoId) {
                 const todoData = {
                     title: todoValue,
-                    description: ''
+                    checked: data.checked,
                 };
 
-                editTodoById(todoId, todoData)
+                updateTodoById(todoId, todoData)
                     .then(() => {
                         refreshTodos();  // Refreshing todos
                     })
