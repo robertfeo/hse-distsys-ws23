@@ -11,8 +11,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.todolist.backend.dto.TodoItemDto;
 import com.todolist.backend.model.TodoItem;
 import com.todolist.backend.repository.TodoItemDao;
+import com.todolist.backend.utils.Converter;
 
 @Service
 public class TodoItemService {
@@ -29,8 +31,8 @@ public class TodoItemService {
             return new ResponseEntity<>(todoItemDao.findAll(), HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error finding TodoItems: ", e);
+            return new ResponseEntity<>(new ArrayList<>(), HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(new ArrayList<>(), HttpStatus.BAD_REQUEST);
     }
 
     public ResponseEntity<String> addToDoItem(TodoItem todoItem) {
@@ -87,9 +89,29 @@ public class TodoItemService {
             TodoItem existingItem = todoItem.get();
             existingItem.setTitle(title);
             todoItemDao.save(existingItem);
-            return ResponseEntity.ok(existingItem);
+            return new ResponseEntity<>(existingItem, HttpStatus.OK);
         } else {
-            return ResponseEntity.notFound().build();
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+    }
+
+    public ResponseEntity<TodoItem> updateTodoItemState(Integer id, TodoItemDto todoItemDto) {
+        Optional<TodoItem> todoItemOptional = todoItemDao.findById(id);
+        if (todoItemOptional.isPresent()) {
+            TodoItem existingItem = todoItemOptional.get();
+            TodoItem updatedTodo = Converter.convertToEntity(todoItemDto);
+            if (updatedTodo.isChecked() != existingItem.isChecked()) {
+                existingItem.setChecked(updatedTodo.isChecked());
+                todoItemDao.save(existingItem);
+            } else if (updatedTodo.getTitle() != null && !updatedTodo.getTitle().equals(existingItem.getTitle())) {
+                existingItem.setTitle(updatedTodo.getTitle());
+                todoItemDao.save(existingItem);
+            } else {
+                return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            }
+            return new ResponseEntity<>(existingItem, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
     }
 }

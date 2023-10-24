@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,13 +13,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.todolist.backend.dto.TodoItemDto;
 import com.todolist.backend.model.TodoItem;
 import com.todolist.backend.service.TodoItemService;
 
 @RestController
 @RequestMapping("/api/todos")
 public class TodoItemController {
-
     @Autowired
     TodoItemService todoItemService;
 
@@ -50,8 +51,17 @@ public class TodoItemController {
         return todoItemService.deleteTodoItem(title, id);
     }
 
-    @RequestMapping(method = RequestMethod.PUT, path = "/update/{id}/{title}")
-    public ResponseEntity<TodoItem> updateTodoItem(@PathVariable Integer id, @PathVariable String title) {
-        return todoItemService.updateTodoItem(id, title);
+    /*
+     * @RequestMapping(method = RequestMethod.PATCH, path = "/update/{id}/{title}")
+     * public ResponseEntity<TodoItem> updateTodoItem(@PathVariable Integer
+     * id, @PathVariable String title) {
+     * return todoItemService.updateTodoItem(id, title);
+     * }
+     */
+
+    @RequestMapping(value = "/update/{id}", method = RequestMethod.PATCH, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<TodoItem> updateTodoItem(@PathVariable("id") Integer id,
+            @RequestBody TodoItemDto updateRequest) {
+        return todoItemService.updateTodoItemState(id, updateRequest);
     }
 }
