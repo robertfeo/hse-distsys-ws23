@@ -124,8 +124,6 @@ function App() {
             </div>
 
             <div className='py-2'>
-
-
               {/* Für unerledigte TODOs */}
               {filteredTodos?.map((item, index) => {
                 if (!item.checked) {

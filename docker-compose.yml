@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 services:
   backend:
     container_name: backend
@@ -28,6 +28,18 @@ services:
       - db-data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+    networks:
+      - todolist-network
+  frontend:
+    container_name: frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    image: img-frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
     networks:
       - todolist-network
 
