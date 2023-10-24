@@ -10,11 +10,9 @@ import com.todolist.backend.dto.TodoItemDto;
 import com.todolist.backend.model.TodoItem;
 import com.todolist.backend.repository.TodoItemDao;
 
-import lombok.experimental.UtilityClass;
-
-@UtilityClass
 public class Converter {
 
+    @Autowired
     private ModelMapper modelMapper;
 
     @Autowired
