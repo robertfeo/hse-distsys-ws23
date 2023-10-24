@@ -9,12 +9,14 @@ services:
     ports:
       - "8080:8080"
     depends_on:
-      - database
+      database:
+        condition: service_healthy
     networks:
       - todolist-network
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/todolist
     restart: unless-stopped
+
   database:
     container_name: database
     image: img-database
@@ -32,6 +34,7 @@ services:
     restart: unless-stopped
     networks:
       - todolist-network
+
   frontend:
     container_name: frontend
     build:
@@ -41,7 +44,8 @@ services:
     ports:
       - "3000:3000"
     depends_on:
-      - backend
+      backend:
+        condition: service_healthy
     restart: unless-stopped
     networks:
       - todolist-network
