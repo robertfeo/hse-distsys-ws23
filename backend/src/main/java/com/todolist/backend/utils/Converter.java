@@ -15,7 +15,6 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class Converter {
 
-    @Autowired
     private ModelMapper modelMapper;
 
     @Autowired
