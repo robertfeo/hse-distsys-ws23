@@ -10,4 +10,4 @@ COPY . .
 
 RUN npm run build:production
 
-CMD ["npm", "start:production"]
+CMD ["npm", "run", "start:production"]
