@@ -16,7 +16,6 @@ services:
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/todolist
     restart: unless-stopped
-
   database:
     container_name: database
     image: img-database
@@ -39,16 +38,19 @@ services:
     restart: unless-stopped
     networks:
       - todolist-network
-
   frontend:
     container_name: frontend
     build:
       context: ./frontend
       dockerfile: Dockerfile
     image: img-frontend
+    environment:
+      REACT_APP_BACKEND_URL: http://backend:8080
     ports:
       - "3000:3000"
     restart: unless-stopped
+    depends_on:
+      - backend
     networks:
       - todolist-network
 
