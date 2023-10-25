@@ -9,8 +9,7 @@ services:
     ports:
       - "8080:8080"
     depends_on:
-      database:
-        condition: service_healthy
+      - database
     networks:
       - todolist-network
     environment:
@@ -30,11 +29,6 @@ services:
       - db-data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U robert"]
-      interval: 30s
-      timeout: 5s
-      retries: 5
     restart: unless-stopped
     networks:
       - todolist-network
@@ -44,8 +38,6 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
     image: img-frontend
-    environment:
-      REACT_APP_BACKEND_URL: http://backend:8080
     ports:
       - "3000:3000"
     restart: unless-stopped
