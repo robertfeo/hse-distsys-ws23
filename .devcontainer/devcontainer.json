@@ -14,7 +14,6 @@
       }
     }
   },
-  "forwardPorts": [8080,3000,5432],
   "features": {},
   "postCreateCommand": "bash init_github_codespace.sh"
 }
