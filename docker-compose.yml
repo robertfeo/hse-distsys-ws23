@@ -30,6 +30,10 @@ services:
       POSTGRES_USER: robert
       POSTGRES_PASSWORD: securepassword
       POSTGRES_DB: todolist
+      - OTEL_SERVICE_NAME=frontend
+      - OTEL_METRICS_EXPORTER=none
+      - OTEL_TRACES_EXPORTER=jaeger
+      - OTEL_EXPORTER_JAEGER_ENDPOINT=http://jaeger:14250
     volumes:
       - db-data:/var/lib/postgresql/data
     ports:
