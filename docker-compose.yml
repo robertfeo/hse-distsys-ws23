@@ -54,6 +54,8 @@ services:
       - "16686:16686"
       - "14268"
       - "14250"
+    networks:
+      - todolist-network
 
   # Zipkin
   zipkin-all-in-one:
@@ -61,6 +63,8 @@ services:
     restart: always
     ports:
       - "9411:9411"
+    networks:
+      - todolist-network
 
 networks:
   todolist-network:
