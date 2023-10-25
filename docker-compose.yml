@@ -27,9 +27,9 @@ services:
       context: ./backend/database/
       dockerfile: Dockerfile
     environment:
-      POSTGRES_USER: robert
-      POSTGRES_PASSWORD: securepassword
-      POSTGRES_DB: todolist
+      - POSTGRES_USER=robert
+      - POSTGRES_PASSWORD=securepassword
+      - POSTGRES_DB=todolist
       - OTEL_SERVICE_NAME=frontend
       - OTEL_METRICS_EXPORTER=none
       - OTEL_TRACES_EXPORTER=jaeger
