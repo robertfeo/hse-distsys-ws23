@@ -6,15 +6,20 @@ services:
     build:
       context: ./backend/
       dockerfile: Dockerfile
+    environment:
+      - OTEL_SERVICE_NAME=backend
+      - OTEL_METRICS_EXPORTER=none
+      - OTEL_TRACES_EXPORTER=jaeger
+      - OTEL_EXPORTER_JAEGER_ENDPOINT=http://jaeger:14250
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://database:5432/todolist
     ports:
       - "8080:8080"
     depends_on:
       - database
     networks:
       - todolist-network
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/todolist
     restart: unless-stopped
+
   database:
     container_name: database
     image: img-database
@@ -32,6 +37,7 @@ services:
     restart: unless-stopped
     networks:
       - todolist-network
+
   frontend:
     container_name: frontend
     build:
@@ -46,23 +52,13 @@ services:
     networks:
       - todolist-network
 
-  # Jaeger
-  jaeger-all-in-one:
+  jaeger:
+    container_name: jaeger
     image: jaegertracing/all-in-one:latest
     restart: always
     ports:
       - "16686:16686"
-      - "14268"
-      - "14250"
-    networks:
-      - todolist-network
-
-  # Zipkin
-  zipkin-all-in-one:
-    image: openzipkin/zipkin:latest
-    restart: always
-    ports:
-      - "9411:9411"
+      - "14250:14250"
     networks:
       - todolist-network
 

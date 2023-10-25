@@ -50,7 +50,7 @@ public class TodoItemController {
         return todoItemService.deleteTodoItem(title, id);
     }
 
-    @RequestMapping(value = "/update/{id}", produces = "application/json", method = RequestMethod.PUT)
+    @RequestMapping(method = RequestMethod.PUT, value = "/update/{id}", produces = "application/json")
     public ResponseEntity<TodoItem> updateTodoItem(@PathVariable Integer id,
             @RequestBody TodoItem newTodoItem) {
         return todoItemService.updateTodoItem(id, newTodoItem);
