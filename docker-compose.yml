@@ -53,14 +53,16 @@ services:
       - backend
     networks:
       - todolist-network
-
   jaeger-all-in-one:
+    container_name: telemetry
     image: jaegertracing/all-in-one:latest
     restart: always
     ports:
       - "16686:16686"
       - "14268"
       - "14250"
+    networks:
+      - todolist-network
 
 networks:
   todolist-network:
