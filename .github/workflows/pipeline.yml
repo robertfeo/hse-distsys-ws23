@@ -6,7 +6,7 @@ on:
       - main
       - dev
     tags:
-      - 'v*'
+      - 'v*.*'
   pull_request:
     branches: ["main"]
 
@@ -53,12 +53,21 @@ jobs:
           npm run test
           npm run build
 
-  docker:
+  docker-publish:
     needs: [build-backend, build-frontend]
     runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Login to Docker Hub
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_REGISTRY_USERNAME }}
+          password: ${{ secrets.DOCKER_REGISTRY_PASSWORD }}
       - name: Docker meta for backend
         id: meta_backend
         uses: docker/metadata-action@v5
@@ -81,19 +90,17 @@ jobs:
             type=ref,event=pr
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
-      - name: Login to DockerHub
-        if: github.event_name != 'pull_request'
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKER_REGISTRY_USERNAME }}
-          password: ${{ secrets.DOCKER_REGISTRY_PASSWORD }}
       - name: Build and push backend
         uses: docker/build-push-action@v5
         with:
           context: ./backend
+          push: true
           tags: ${{ steps.meta_backend.outputs.tags }}
+          labels: ${{ steps.meta_backend.outputs.labels }}
       - name: Build and push frontend
         uses: docker/build-push-action@v5
         with:
           context: ./frontend
+          push: true
           tags: ${{ steps.meta_frontend.outputs.tags }}
+          labels: ${{ steps.meta_frontend.outputs.labels }}
