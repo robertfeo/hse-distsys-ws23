@@ -70,17 +70,21 @@ jobs:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
             let version = '0.0.1';
-            const latestTag = await github.repos.getLatestRelease().then(release => release.tag_name || '0.0.0');
+            let latestRelease = await github.repos.getLatestRelease();
+            let latestTag = '0.0.0';
+            if (latestRelease) {
+              latestTag = latestRelease.tag_name;  
+            }
             if (latestTag != '0.0.0') {
-              const [major, minor, patch] = latestTag.split('.'); 
-              version = `${major}.${minor}.${parseInt(patch) + 1}`;  
+              const [major, minor, patch] = latestTag.split('.');
+              version = `${major}.${minor}.${parseInt(patch) + 1}`;
             }
             const newTag = `v${version}`;
             github.git.createRef({
-              owner: context.repo.owner,
+              owner: context.repo.owner, 
               repo: context.repo.repo,
               ref: `refs/tags/${newTag}`,
-              sha: context.sha  
+              sha: context.sha
             });
       - uses: docker/build-push-action@v3
         with:
