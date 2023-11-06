@@ -83,6 +83,7 @@ jobs:
         shell: bash
       - name: Build Docker image for backend
         run: |
+          echo "Tag to be used: ${{ steps.tag_version.outputs.new_tag }}"
           docker build -t rofeit00/todo-backend:${{ steps.tag_version.outputs.new_tag }} ./backend
       - name: Build Docker image for frontend
         run: |
