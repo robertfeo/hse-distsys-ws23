@@ -6,7 +6,7 @@ on:
       - main
       - dev
     tags:
-      - 'v*.*'
+      - 'v*.*.*'
   pull_request:
     branches: ["main"]
 
@@ -53,29 +53,25 @@ jobs:
           npm run test
           npm run build
 
-  github-release:
-    name: Create Release
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Bump version and push tag
-        id: tag_version
-        uses: mathieudutour/github-tag-action@v6.1
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Create a GitHub release
-        uses: ncipollo/release-action@v1
-        with:
-          tag: ${{ steps.tag_version.outputs.new_tag }}
-          name: Release ${{ steps.tag_version.outputs.new_tag }}
-
-  docker-publish:
+  publish:
     needs: [build-backend, build-frontend]
     runs-on: ubuntu-latest
     permissions:
       packages: write
       contents: read
     steps:
+      - name: Bump version and push tag
+        uses: anothrNick/github-tag-action@1.64.0 # Don't use @master or @v1 unless you're happy to test the latest version
+        id: tag_version
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # if you don't want to set write permissions use a PAT token
+          WITH_V: true
+          PRERELEASE: true
+      - name: Create a GitHub release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ steps.tag_version.outputs.new_tag }}
+          name: Release ${{ steps.tag_version.outputs.new_tag }}
       - name: Checkout
         uses: actions/checkout@v4
       - name: Login to Docker Hub
