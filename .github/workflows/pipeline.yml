@@ -66,8 +66,8 @@ jobs:
           custom_release_rules: |
             bug:patch:Bug Fix,
             chore:patch:Chore,
-            feat:patch:Feature,
-            perf:patch:Performance,
+            feat:minor:Feature,
+            perf:major:Performance,
             ci:patch:Continuous Integration,
             docs:patch:Documentation,
             style:patch:Code Style,
