@@ -61,17 +61,15 @@ jobs:
       contents: read
     steps:
       - name: Bump version and push tag
-        uses: anothrNick/github-tag-action@1.67.0 # Don't use @master or @v1 unless you're happy to test the latest version
         id: tag_version
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # if you don't want to set write permissions use a PAT token
-          WITH_V: true
-          PRERELEASE: true
+        uses: mathieudutour/github-tag-action@v6.1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
       - name: Create a GitHub release
         uses: ncipollo/release-action@v1
         with:
-          tag: ${{ steps.tag_version.outputs.new_tag }}
-          name: Release ${{ steps.tag_version.outputs.new_tag }}
+          tag: ${{ steps.tag_version.outputs.new_version }}
+          name: Release ${{ steps.tag_version.outputs.new_version }}
       - name: Checkout
         uses: actions/checkout@v4
       - name: Login to Docker Hub
@@ -87,7 +85,7 @@ jobs:
           images: |
             rofeit00/todo-backend
           tags: |
-            type=raw,value=${{ steps.tag_version.outputs.new_tag }}
+            type=raw,value=${{ steps.tag_version.outputs.new_version }}
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
       - name: Docker meta for frontend
@@ -97,7 +95,7 @@ jobs:
           images: |
             rofeit00/todo-frontend
           tags: |
-            type=raw,value=${{ steps.tag_version.outputs.new_tag }}
+            type=raw,value=${{ steps.tag_version.outputs.new_version }}
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
       - name: Build and push backend
