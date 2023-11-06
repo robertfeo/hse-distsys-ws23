@@ -224,3 +224,5 @@ In addition to tracing, logs and metrics can be observed through Jaeger's integr
 
 #### Adding Tracing to New Services
 When adding new services to the application, they can be instrumented using the OpenTracing API and configured to report to the same Jaeger instance, ensuring a unified view of the system's traces.
+
+.
