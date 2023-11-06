@@ -6,7 +6,7 @@ The Todo List Application is a full-stack web application that provides a conven
 
 This application is designed to run using Docker Compose, which orchestrates multiple containers to work together. The provided `docker-compose.yml` file contains the configuration needed to build and run the application services.
 
-### Prerequisites
+### Prerequisites Docker
 
 Before you can use Docker Compose to run the application, you must install:
 - Docker
