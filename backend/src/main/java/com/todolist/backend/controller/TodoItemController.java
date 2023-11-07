@@ -51,8 +51,7 @@ public class TodoItemController {
     }
 
     @RequestMapping(method = RequestMethod.PUT, value = "/update/{id}", produces = "application/json")
-    public ResponseEntity<TodoItem> updateTodoItem(@PathVariable Integer id,
-            @RequestBody TodoItem newTodoItem) {
+    public ResponseEntity<TodoItem> updateTodoItem(@PathVariable Integer id, @RequestBody TodoItem newTodoItem) {
         return todoItemService.updateTodoItem(id, newTodoItem);
     }
 }
