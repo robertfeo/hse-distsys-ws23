@@ -1,7 +1,6 @@
 # Todo List Application Overview
 
 [![CI/CD Pipeline](https://github.com/robertfeo/hse-distsys-ws23/actions/workflows/pipeline.yml/badge.svg)](https://github.com/robertfeo/hse-distsys-ws23/actions/workflows/pipeline.yml)
-[![Release](https://github.com/robertfeo/hse-distsys-ws23/actions/workflows/publish.yml/badge.svg?event=release)](https://github.com/robertfeo/hse-distsys-ws23/actions/workflows/publish.yml)
 [![codecov](https://codecov.io/gh/robertfeo/hse-distsys-ws23/branch/dev/graph/badge.svg?token=QZQZQZQZQZ)](https://codecov.io/gh/robertfeo/hse-distsys-ws23)
 
 The Todo List Application is a full-stack web application that provides a convenient interface for managing a to-do list. It utilizes Docker containers to encapsulate the backend, frontend, and database components, ensuring a consistent and easily reproducible environment for development, testing, and production.
