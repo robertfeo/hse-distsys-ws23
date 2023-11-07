@@ -5,8 +5,10 @@ on:
     types: [closed]
     branches: [main]
   push:
-    tags:
-      - "v*.*.*"
+    branches:
+      - main
+  tags:
+    - "v*.*.*"
 
 jobs:
   publish:
