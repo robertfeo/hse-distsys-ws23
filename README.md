@@ -1,11 +1,8 @@
 # Todo List Application Overview
 
 [![CI/CD Pipeline](https://github.com/robertfeo/hse-distsys-ws23/actions/workflows/pipeline.yml/badge.svg)](https://github.com/robertfeo/hse-distsys-ws23/actions/workflows/pipeline.yml)
+[![Release](https://github.com/robertfeo/hse-distsys-ws23/actions/workflows/publish.yml/badge.svg?event=release)](https://github.com/robertfeo/hse-distsys-ws23/actions/workflows/publish.yml)
 [![codecov](https://codecov.io/gh/robertfeo/hse-distsys-ws23/branch/dev/graph/badge.svg?token=QZQZQZQZQZ)](https://codecov.io/gh/robertfeo/hse-distsys-ws23)
-[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=robertfeo_hse-distsys-ws23&metric=bugs)](https://sonarcloud.io/summary/new_code?id=robertfeo_hse-distsys-ws23)
-[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=robertfeo_hse-distsys-ws23&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=robertfeo_hse-distsys-ws23)
-[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=robertfeo_hse-distsys-ws23&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=robertfeo_hse-distsys-ws23)
-[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=robertfeo_hse-distsys-ws23&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=robertfeo_hse-distsys-ws23)
 
 The Todo List Application is a full-stack web application that provides a convenient interface for managing a to-do list. It utilizes Docker containers to encapsulate the backend, frontend, and database components, ensuring a consistent and easily reproducible environment for development, testing, and production.
 

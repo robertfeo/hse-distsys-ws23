@@ -4,10 +4,14 @@ on:
   pull_request:
     types: [closed]
     branches: [main]
+  push:
+    tags:
+      - "v*.*.*"
 
 jobs:
   publish:
     runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true || startsWith(github.ref, 'refs/tags/v')
     env:
       BASE_SEMANTIC_VERSION: ""
     steps:
@@ -21,6 +25,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           WITH_V: true
+          RELEASE_BRANCHES: main
+          INITIAL_VERSION: 0.0.0
       - name: Get base semantic version
         run: echo "BASE_SEMANTIC_VERSION=$(echo ${{ steps.tag_version.outputs.new_tag }})" >> $GITHUB_ENV
       - name: Create a GitHub release
