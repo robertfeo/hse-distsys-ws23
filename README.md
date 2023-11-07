@@ -5,6 +5,7 @@
 
 The Todo List Application is a full-stack web application that provides a convenient interface for managing a to-do list. It utilizes Docker containers to encapsulate the backend, frontend, and database components, ensuring a consistent and easily reproducible environment for development, testing, and production.
 
+
 ## Using Docker Compose
 
 This application is designed to run using Docker Compose, which orchestrates multiple containers to work together. The provided `docker-compose.yml` file contains the configuration needed to build and run the application services.
