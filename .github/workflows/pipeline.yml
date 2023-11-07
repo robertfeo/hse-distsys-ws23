@@ -65,7 +65,6 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           custom_release_rules: |
             bug:patch,
-            chore:patch,
             feat:minor,
             perf:major,
             docs:patch,
