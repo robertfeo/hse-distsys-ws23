@@ -96,5 +96,5 @@ jobs:
       - name: Test Frontend
         working-directory: ./frontend
         run: |
-          npm ci
+          npm install
           npm test
