@@ -27,6 +27,9 @@ jobs:
           WITH_V: true
           RELEASE_BRANCHES: main
           INITIAL_VERSION: 0.0.0
+          MAJOR_STRING_TOKEN: major
+          MINOR_STRING_TOKEN: minor
+          PATCH_STRING_TOKEN: patch
       - name: Get base semantic version
         run: echo "BASE_SEMANTIC_VERSION=$(echo ${{ steps.tag_version.outputs.new_tag }})" >> $GITHUB_ENV
       - name: Create a GitHub release
@@ -35,7 +38,6 @@ jobs:
           tag: ${{ env.BASE_SEMANTIC_VERSION }}
           name: Release ${{ env.BASE_SEMANTIC_VERSION }}
       - name: Login to Docker Hub
-        if: github.event_name != 'pull_request'
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_REGISTRY_USERNAME }}
@@ -72,3 +74,7 @@ jobs:
           tags: |
             ${{ steps.meta_frontend.outputs.tags }}
             rofeit00/todo-frontend:latest
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v3
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
