@@ -1,5 +1,4 @@
 # Todo List Application Overview
-
 [![CI/CD Pipeline](https://github.com/robertfeo/hse-distsys-ws23/actions/workflows/pipeline.yml/badge.svg)](https://github.com/robertfeo/hse-distsys-ws23/actions/workflows/pipeline.yml)
 [![codecov](https://codecov.io/gh/robertfeo/hse-distsys-ws23/branch/dev/graph/badge.svg?token=QZQZQZQZQZ)](https://codecov.io/gh/robertfeo/hse-distsys-ws23)
 
