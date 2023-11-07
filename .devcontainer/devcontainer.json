@@ -1,0 +1,19 @@
+{
+  "image": "mcr.microsoft.com/devcontainers/universal:2-linux",
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "extensions.verifySignature": false
+      },
+      "java.compile.nullAnalysis.mode": "automatic",
+      "java.configuration.updateBuildConfiguration": "automatic",
+      "githubPullRequests.ignoredPullRequestBranches": ["main"],
+      "git.ignoreLimitWarning": true,
+      "yaml.schemas": {
+        "https://json.schemastore.org/sourcehut-build-0.41.2.json": "file:///workspaces/hse-distsys-ws23/.github/workflows.yml"
+      }
+    }
+  },
+  "features": {},
+  "postCreateCommand": "bash init_github_codespace.sh"
+}

@@ -1,0 +1,68 @@
+name: Publish
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [main]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    env:
+      BASE_SEMANTIC_VERSION: ""
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.merge_commit_sha }}
+          fetch-depth: "0"
+      - name: Bump version and push tag
+        uses: anothrNick/github-tag-action@1.67.0
+        id: tag_version
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WITH_V: true
+      - name: Get base semantic version
+        run: echo "BASE_SEMANTIC_VERSION=$(echo ${{ steps.tag_version.outputs.new_tag }})" >> $GITHUB_ENV
+      - name: Create a GitHub release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ env.BASE_SEMANTIC_VERSION }}
+          name: Release ${{ env.BASE_SEMANTIC_VERSION }}
+      - name: Login to Docker Hub
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_REGISTRY_USERNAME }}
+          password: ${{ secrets.DOCKER_REGISTRY_PASSWORD }}
+      - name: Docker meta for backend
+        id: meta_backend
+        uses: docker/metadata-action@v5
+        with:
+          images: |
+            rofeit00/todo-backend
+          tags: |
+            type=raw,value=${{ env.BASE_SEMANTIC_VERSION }}
+      - name: Docker meta for frontend
+        id: meta_frontend
+        uses: docker/metadata-action@v5
+        with:
+          images: |
+            rofeit00/todo-frontend
+          tags: |
+            type=raw,value=${{ env.BASE_SEMANTIC_VERSION }}
+      - name: Build and push backend
+        uses: docker/build-push-action@v5
+        with:
+          context: ./backend
+          push: true
+          tags: |
+            ${{ steps.meta_backend.outputs.tags }}
+            rofeit00/todo-backend:latest
+      - name: Build and push frontend
+        uses: docker/build-push-action@v5
+        with:
+          context: ./frontend
+          push: true
+          tags: |
+            ${{ steps.meta_frontend.outputs.tags }}
+            rofeit00/todo-frontend:latest

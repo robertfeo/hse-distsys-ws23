@@ -20,7 +20,5 @@ public class TodoItem {
 
     private String title;
 
-    private String description;
-
-    /* private boolean status; */
+    private boolean isChecked;
 }

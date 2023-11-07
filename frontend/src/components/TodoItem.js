@@ -1,32 +1,84 @@
+import clsx from 'clsx';
 import React from 'react';
-import { Button, Typography, Box, Grid} from '@mui/material';
+import { deleteTodoById, updateTodoById } from '../api/todos';
+import CheckIcon from './icons/CheckIcon';
+import DeleteIcon from './icons/DeleteIcon';
+import EditIcon from './icons/EditIcon';
 
-function TodoItem({ todo, onDelete, onEdit }) {
+const TodoItem = ({ searchTerm, item, onEditTodoItem, refreshTodos }) => {
+    const handleRemoveTodoItem = () => {
+        deleteTodoById(item.id)
+            .then(() => {
+                refreshTodos();
+            })
+            .catch((error) => {
+                console.error("There was an error deleting the todo", error);
+            });
+    };
+
+    const handleCheckTodoItem = () => {
+        item.checked = !item.checked;
+        updateTodoById(item.id, item)
+            .then(() => {
+                refreshTodos();
+            })
+            .catch((error) => {
+                console.error("There was an error editing the todo", error);
+            });
+    };
+
     return (
-        <Box bgcolor="#e8eaf6" sx={{ minWidth: 500, padding: 2, borderBottom: '1px solid #e0e0e0', marginBottom: 1 }}>
-            <Grid container spacing={2} alignItems="center">
-                <Grid item xs={8}>
-                    <Typography sx={{ fontSize: 16 }}>
-                        {todo.title}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                        {todo.description ? todo.description : 'No description provided.'}
-                    </Typography>
-                </Grid>
-                <Grid item xs={4} container alignItems="center" justifyContent="flex-end">
-                    <Button size="small" variant="outlined" color="primary" onClick={() => onEdit(todo.id)}>
-                        Edit
-                    </Button>
-                    <Button size="small" variant="outlined" color="error" onClick={() => onDelete(todo.id)} style={{ marginLeft: '10px' }}>
-                        Delete
-                    </Button>
-                </Grid>
-            </Grid>
-        </Box>
+        <div className={clsx(
+            'mt-2.5 flex w-full items-center justify-between bg-white p-4',
+            'rounded-lg border border-gray-200 shadow',
+        )}>
+            <span
+                className='font-normal text-gray-700'
+                dangerouslySetInnerHTML={{
+                    __html: searchTerm !== ''
+                        ? item.title.replace(searchTerm, `<span class="bg-blue-100 font-bold">${searchTerm}</span>`)
+                        : item.title,
+                }}
+            ></span>
+
+            <div className='flex gap-2'>
+
+                <button
+                    onClick={handleRemoveTodoItem}
+                    type='button'
+                    className={clsx(
+                        'flex h-10 w-10 items-center justify-center rounded-lg bg-rose-700',
+                        'hover:bg-rose-800 focus:no-underline focus:outline-none',
+                    )}
+                >
+                    <DeleteIcon />
+                </button>
+
+                <button
+                    onClick={onEditTodoItem}
+                    type='button'
+                    className={clsx(
+                        'flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-700',
+                        'hover:bg-indigo-800 focus:no-underline focus:outline-none',
+                    )}
+                >
+                    <EditIcon />
+                </button>
+
+                <button
+                    onClick={handleCheckTodoItem}
+                    type='button'
+                    className={clsx(
+                        item.checked ? 'bg-emerald-700' : 'bg-gray-400',
+                        'flex h-10 w-10 items-center justify-center rounded-lg',
+                        'hover:bg-emerald-800 focus:no-underline focus:outline-none',
+                    )}
+                >
+                    <CheckIcon />
+                </button>
+            </div>
+        </div>
     );
-}
-
-
-
+};
 
 export default TodoItem;

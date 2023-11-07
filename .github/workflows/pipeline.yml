@@ -1,0 +1,108 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  build-backend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - name: Setup Java
+        uses: actions/setup-java@v3.13.0
+        with:
+          distribution: "adopt"
+          java-version: "17"
+      - name: Cache Maven dependencies
+        uses: actions/cache@v3.3.2
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+      - name: Build Backend
+        working-directory: ./backend
+        run: mvn clean package -DskipTests
+
+  test-backend:
+    needs: build-backend
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - name: Setup Java
+        uses: actions/setup-java@v3.13.0
+        with:
+          distribution: "adopt"
+          java-version: "17"
+      - name: Cache Maven dependencies
+        uses: actions/cache@v3.3.2
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+      - name: Test Backend
+        working-directory: ./backend
+        run: mvn test
+
+  build-frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - name: Setup Node.js
+        uses: actions/setup-node@v4.0.0
+        with:
+          node-version: 18
+      - name: Cache Node.js modules
+        uses: actions/cache@v3.3.2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: ${{ runner.os }}-node
+      - name: Install dependencies
+        working-directory: ./frontend
+        run: npm install
+      - name: Build Frontend
+        working-directory: ./frontend
+        run: npm run build
+
+  test-frontend:
+    needs: build-frontend
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - name: Setup Node.js
+        uses: actions/setup-node@v4.0.0
+        with:
+          node-version: 18
+      - name: Cache Node.js modules
+        uses: actions/cache@v3.3.2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: ${{ runner.os }}-node
+      - name: Test Frontend
+        working-directory: ./frontend
+        run: |
+          npm install
+          npm test
+
+  coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v3
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
