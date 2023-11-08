@@ -74,7 +74,3 @@ jobs:
           tags: |
             ${{ steps.meta_frontend.outputs.tags }}
             rofeit00/todo-frontend:latest
-      - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v3
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
