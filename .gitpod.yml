@@ -2,7 +2,7 @@ image:
   file: .gitpod.Dockerfile
 tasks:
   - init: |
-      sdk install java 21.0.1 < /dev/null
+      echo Y | sdk upgrade
       cd backend/
       mvn clean package
       cd ..
