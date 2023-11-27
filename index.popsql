@@ -1,3 +1,4 @@
 {
-  "2380520": "database/2380520-schema.sql"
+  "2380520": "database/2380520-schema.sql",
+  "2380530": "backend/src/main/resources/import.sql"
 }
