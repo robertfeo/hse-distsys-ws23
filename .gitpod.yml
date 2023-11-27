@@ -2,10 +2,11 @@ image:
   file: .gitpod.Dockerfile
 tasks:
   - init: |
+      echo Y | sdk upgrade
       cd backend/
       mvn clean package
       cd ..
-      npm install -g npm@10.2.1
+      npm install -g npm@10.2.4
       cd frontend/
       npm install --silent
       npm run build

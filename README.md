@@ -1,9 +1,18 @@
-# Todo List Application Overview
+<div align="center">
+      <h1> <img src="https://i.imgur.com/SgXHmek.png" width="80px"><br/>Todo List</h1>
+     </div>
+
+
+# Description
+A fullstack Todo List Application using Docker for easy development, testing, and deployment. Features a Spring Boot backend, React.js frontend, PostgreSQL database, and Jaeger tracing for observability.
+
+## Features
+The Todo List Application is a fullstack web application that provides a convenient interface for managing a to-do list. It utilizes Docker containers to encapsulate the backend, frontend, and database components, ensuring a consistent and easily reproducible environment for development, testing, and production.
+
+## Tech Used
+ ![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white) ![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=java&logoColor=white) ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E) ![NPM](https://img.shields.io/badge/NPM-%23000000.svg?style=for-the-badge&logo=npm&logoColor=white) ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB) ![Spring](https://img.shields.io/badge/spring-%236DB33F.svg?style=for-the-badge&logo=spring&logoColor=white) ![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white) ![Postgres](https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white) ![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white) ![Postman](https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white)
 
 [![CI/CD Pipeline](https://github.com/robertfeo/hse-distsys-ws23/actions/workflows/pipeline.yml/badge.svg)](https://github.com/robertfeo/hse-distsys-ws23/actions/workflows/pipeline.yml)
-[![codecov](https://codecov.io/gh/robertfeo/hse-distsys-ws23/branch/dev/graph/badge.svg?token=QZQZQZQZQZ)](https://codecov.io/gh/robertfeo/hse-distsys-ws23)
-
-The Todo List Application is a full-stack web application that provides a convenient interface for managing a to-do list. It utilizes Docker containers to encapsulate the backend, frontend, and database components, ensuring a consistent and easily reproducible environment for development, testing, and production.
 
 
 ## Using Docker Compose
@@ -279,3 +288,6 @@ In addition to tracing, logs and metrics can be observed through Jaeger's integr
 #### Adding Tracing to New Services
 
 When adding new services to the application, they can be instrumented using the OpenTracing API and configured to report to the same Jaeger instance, ensuring a unified view of the system's traces.
+
+<!-- </> with 💛 by readMD (https://readmd.itsvg.in) -->
+    
