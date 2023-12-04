@@ -71,5 +71,3 @@ networks:
 volumes:
   db-data:
     name: volume-database
-  prom_data:
-    name: prometheus
