@@ -12,6 +12,7 @@ services:
       - OTEL_TRACES_EXPORTER=jaeger
       - OTEL_EXPORTER_JAEGER_ENDPOINT=http://jaeger:14250
       - SPRING_DATASOURCE_URL=jdbc:postgresql://database:5432/todolist
+      - BACKEND_URL=http://backend:5000
     ports:
       - "8080:8080"
     depends_on:
@@ -44,6 +45,9 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
     image: img-frontend
+    environment:
+      - REACT_APP_BACKEND_URL=http://backend:5000
+      - WDS_SOCKET_PORT=0
     ports:
       - "3000:3000"
     restart: unless-stopped

@@ -4,12 +4,7 @@ sudo apt upgrade -y -q
 #NODEJS_VERSION="21.0.0"
 #nvm install $NODEJS_VERSION -y
 #nvm use $NODEJS_VERSION && nvm alias default $NODEJS_VERSION
+jq -r ".CODESPACE_NAME" /workspaces/.codespaces/shared/environment-variables.json > /workspaces/.codespaces/shared/CODESPACE_NAME
 echo Y | sdk upgrade
 npm install -g npm@10.2.1
-cd backend/
-mvn clean package
-cd ..
-cd frontend/
-npm install --silent
-cd ..
-docker-compose up --build -d
+#docker-compose up --build -d
