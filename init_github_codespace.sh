@@ -5,6 +5,8 @@ sudo apt upgrade -y -q
 #nvm install $NODEJS_VERSION -y
 #nvm use $NODEJS_VERSION && nvm alias default $NODEJS_VERSION
 jq -r ".CODESPACE_NAME" /workspaces/.codespaces/shared/environment-variables.json > /workspaces/.codespaces/shared/CODESPACE_NAME
+curl -s "https://get.sdkman.io" | bash
+source "$HOME/.sdkman/bin/sdkman-init.sh"
 echo Y | sdk upgrade
 npm install -g npm@10.2.1
 #docker-compose up --build -d
