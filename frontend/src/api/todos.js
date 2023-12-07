@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const codespaceApiUrl = process.env.CODESPACE_NAME ? `https://${process.env.CODESPACE_NAME}-8080.github.dev/api` : '';
-const apiUrl = codespaceApiUrl || 'http://localhost:8080/api';
+const herokuApiUrl = process.env.REACT_APP_BACKEND_URL ? `http://backend:5000/api` : 'https://robertf-todoapp-api-175ccf43153c.herokuapp.com/api';
+const apiUrl = herokuApiUrl || 'http://localhost:8080/api';
 
 export const fetchTodos = () => {
     return axios.get(`${apiUrl}/todos`);

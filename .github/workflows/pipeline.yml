@@ -91,17 +91,30 @@ jobs:
     - name: Login to Heroku Container registry
       env: 
         HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-      run: heroku container:login 
+      run: heroku container:login
+    
+    - name: Build and push database
+      env:
+        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+      working-directory: ./backend/database
+      run: heroku container:push -a robertf-todoapp-db web 
+    - name: Release database
+      env:
+        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+      run: heroku container:release -a robertf-todoapp-db web
+      working-directory: ./backend/database
+    
     - name: Build and push backend
       env:
         HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
       working-directory: ./backend
-      run: heroku container:push -a ${{ secrets.HEROKU_APP_NAME }} web 
+      run: heroku container:push -a robertf-todoapp-api web 
     - name: Release backend
       env:
         HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-      run: heroku container:release -a ${{ secrets.HEROKU_APP_NAME }} web
       working-directory: ./backend
+      run: heroku container:release -a robertf-todoapp-api web
+
     - name: Build and push frontend
       env:
         HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
