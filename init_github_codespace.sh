@@ -1,12 +1,13 @@
 sudo apt update -q
 sudo apt upgrade -y -q
-#sdk install java 17.0.4.1-tem < /dev/null
-#NODEJS_VERSION="21.0.0"
-#nvm install $NODEJS_VERSION -y
-#nvm use $NODEJS_VERSION && nvm alias default $NODEJS_VERSION
+curl https://cli-assets.heroku.com/install.sh | sh
 jq -r ".CODESPACE_NAME" /workspaces/.codespaces/shared/environment-variables.json > /workspaces/.codespaces/shared/CODESPACE_NAME
-curl -s "https://get.sdkman.io" | bash
-source "$HOME/.sdkman/bin/sdkman-init.sh"
+if [ -s "/usr/local/sdkman/bin/sdkman-init.sh" ]; then
+    source "/usr/local/sdkman/bin/sdkman-init.sh"
+else
+    echo "SDKMAN initialization script not found!"
+    exit 1
+fi
+sdk selfupdate force
 echo Y | sdk upgrade
 npm install -g npm@10.2.1
-#docker-compose up --build -d
