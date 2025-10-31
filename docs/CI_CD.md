@@ -229,16 +229,8 @@ Configure these in GitHub repository settings:
 
 **For Docker Registry:**
 ```
-DOCKER_USERNAME=your-dockerhub-username
-DOCKER_PASSWORD=your-dockerhub-password (or access token)
-```
-
-**For Cloud Deployments (optional):**
-```
-AWS_ACCESS_KEY_ID=your-aws-key
-AWS_SECRET_ACCESS_KEY=your-aws-secret
-AZURE_CREDENTIALS=your-azure-service-principal
-GCP_SERVICE_ACCOUNT_KEY=your-gcp-key
+DOCKER_REGISTRY_USERNAME=your-dockerhub-username
+DOCKER_REGISTRY_PASSWORD=your-dockerhub-password (or access token)
 ```
 
 **For Database (optional):**
@@ -268,57 +260,37 @@ env:
 
 ## Deployment Strategy
 
-### Current Strategy: Manual Deployment
+### Current Strategy: Docker Registry Deployment
 
 After successful pipeline:
 1. Build artifacts are created
-2. Docker images can be built manually
-3. Deploy using `docker-compose` or cloud platform
+2. Docker images are built and pushed to Docker Hub
+3. Deploy using `docker-compose` with the published images
 
-### Recommended: Automated Deployment
+### Automated Docker Image Publishing
 
-#### Option 1: Deploy to Cloud on Main Branch
+The workflow automatically:
+1. Bumps version on main branch commits
+2. Creates GitHub releases
+3. Builds Docker images for backend and frontend
+4. Publishes images to Docker Hub with version tags and `latest` tag
 
-Add deployment job to workflow:
+### Deployment Process
 
-```yaml
-deploy:
-  needs: [test-backend, test-frontend]
-  runs-on: ubuntu-latest
-  if: github.ref == 'refs/heads/main'
-  steps:
-    - name: Deploy to Production
-      run: |
-        # Deployment commands here
-```
+To deploy the latest version:
 
-#### Option 2: Blue-Green Deployment
+```bash
+# Pull latest images from Docker Hub
+docker pull rofeit00/todo-backend:latest
+docker pull rofeit00/todo-frontend:latest
 
-```yaml
-deploy:
-  strategy:
-    matrix:
-      environment: [blue, green]
-  steps:
-    - name: Deploy to ${{ matrix.environment }}
-      run: |
-        # Deploy to specific environment
-```
+# Or pull specific version
+docker pull rofeit00/todo-backend:v1.1.0
+docker pull rofeit00/todo-frontend:v1.1.0
 
-#### Option 3: Canary Deployment
-
-```yaml
-deploy-canary:
-  steps:
-    - name: Deploy 10% traffic
-      run: # Deploy to 10% of servers
-
-    - name: Monitor metrics
-      run: # Check error rates
-
-    - name: Deploy remaining 90%
-      if: success()
-      run: # Complete deployment
+# Update docker-compose.yml to use published images
+# Then start services
+docker-compose up -d
 ```
 
 ---

@@ -1,6 +1,6 @@
 # Deployment Guide
 
-This guide provides comprehensive instructions for deploying the Todo List application in various environments.
+This guide provides comprehensive instructions for deploying the Todo List application using Docker.
 
 ## Table of Contents
 
@@ -8,11 +8,6 @@ This guide provides comprehensive instructions for deploying the Todo List appli
 - [Environment Configuration](#environment-configuration)
 - [Local Development](#local-development)
 - [Docker Deployment](#docker-deployment)
-- [Cloud Platforms](#cloud-platforms)
-  - [AWS](#aws-deployment)
-  - [Azure](#azure-deployment)
-  - [Google Cloud Platform](#google-cloud-platform)
-  - [DigitalOcean](#digitalocean-deployment)
 - [Production Checklist](#production-checklist)
 - [Monitoring & Maintenance](#monitoring--maintenance)
 - [Troubleshooting](#troubleshooting)
@@ -24,8 +19,8 @@ This guide provides comprehensive instructions for deploying the Todo List appli
 ### Required Software
 - **Docker** (20.0+) and **Docker Compose** (2.0+)
 - **Git**
-- **Domain name** (for production)
-- **SSL certificate** (Let's Encrypt recommended)
+- **Domain name** (for production, optional)
+- **SSL certificate** (Let's Encrypt recommended for production)
 
 ### Optional for Manual Deployment
 - **Node.js** (18.0+) and **npm**
@@ -39,51 +34,46 @@ This guide provides comprehensive instructions for deploying the Todo List appli
 
 ### Environment Variables
 
-Create environment-specific configuration files:
+The application uses environment variables for configuration. See [ENVIRONMENT_SETUP.md](../ENVIRONMENT_SETUP.md) for complete details.
 
-#### Backend Environment Variables
+#### Quick Setup
 
-**.env.production** (Backend):
+```bash
+# Copy environment template
+cp .env.example .env
+
+# Edit with your configuration
+nano .env
+```
+
+#### Production Environment Variables
+
+**.env.production**:
 ```bash
 # Database Configuration
-SPRING_DATASOURCE_URL=jdbc:postgresql://your-db-host:5432/todolist
-SPRING_DATASOURCE_USERNAME=your_db_user
-SPRING_DATASOURCE_PASSWORD=your_secure_password
+POSTGRES_USER=prod_db_user
+POSTGRES_PASSWORD=your_very_secure_password_here
+POSTGRES_DB=todolist
 
-# Server Configuration
-SERVER_PORT=8080
-SERVER_ADDRESS=0.0.0.0
+# Backend Configuration
+SPRING_DATASOURCE_URL=jdbc:postgresql://database:5432/todolist
+SPRING_DATASOURCE_USERNAME=prod_db_user
+SPRING_DATASOURCE_PASSWORD=your_very_secure_password_here
 
-# JPA/Hibernate
-SPRING_JPA_HIBERNATE_DDL_AUTO=validate
-SPRING_JPA_SHOW_SQL=false
-SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT=org.hibernate.dialect.PostgreSQLDialect
-
-# Logging
-LOGGING_LEVEL_ROOT=INFO
-LOGGING_LEVEL_COM_TODOLIST=INFO
-
-# CORS
-CORS_ALLOWED_ORIGINS=https://your-domain.com,https://www.your-domain.com
-
-# Actuator (Monitoring)
-MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE=health,metrics,prometheus
-MANAGEMENT_ENDPOINT_HEALTH_SHOW_DETAILS=when_authorized
-
-# Jaeger Tracing
-JAEGER_SERVICE_NAME=todo-list-backend
+# Jaeger Configuration
+JAEGER_SERVICE_NAME=todo-list-backend-prod
 JAEGER_AGENT_HOST=jaeger
 JAEGER_AGENT_PORT=6831
 JAEGER_SAMPLER_TYPE=probabilistic
-JAEGER_SAMPLER_PARAM=1.0
-```
+JAEGER_SAMPLER_PARAM=0.1
 
-#### Frontend Environment Variables
-
-**.env.production** (Frontend):
-```bash
+# Frontend Configuration
 REACT_APP_API_URL=https://api.your-domain.com
-REACT_APP_ENV=production
+
+# Docker Image Tags
+BACKEND_IMAGE_TAG=latest
+FRONTEND_IMAGE_TAG=latest
+DATABASE_IMAGE_TAG=latest
 ```
 
 ---
@@ -97,40 +87,43 @@ REACT_APP_ENV=production
 git clone https://github.com/robertfeo/hse-distsys-ws23.git
 cd hse-distsys-ws23
 
+# Copy environment file
+cp .env.example .env
+
 # Start all services
 docker-compose up --build
 
-# Access the application
-# Frontend: http://localhost:3000
-# Backend: http://localhost:8080
-# Jaeger: http://localhost:16686
+# Or run in background
+docker-compose up -d --build
 ```
 
-### Manual Local Setup
+### Access Services
 
-#### 1. Start PostgreSQL
-```bash
-docker run -d \
-  --name todolist-postgres \
-  -e POSTGRES_DB=todolist \
-  -e POSTGRES_USER=robert \
-  -e POSTGRES_PASSWORD=securepassword \
-  -p 5432:5432 \
-  postgres:15-alpine
-```
+- **Frontend**: http://localhost:3000
+- **Backend API**: http://localhost:8080
+- **Jaeger UI**: http://localhost:16686
+- **Database**: localhost:5432
 
-#### 2. Run Backend
-```bash
-cd backend
-mvn clean install
-mvn spring-boot:run
-```
+### Useful Development Commands
 
-#### 3. Run Frontend
 ```bash
-cd frontend
-npm install
-npm start
+# View logs
+docker-compose logs -f
+
+# View specific service logs
+docker-compose logs -f backend
+
+# Stop all services
+docker-compose down
+
+# Stop and remove volumes (clean start)
+docker-compose down -v
+
+# Rebuild specific service
+docker-compose up -d --build backend
+
+# Execute command in container
+docker exec -it backend bash
 ```
 
 ---
@@ -142,44 +135,61 @@ npm start
 Create **docker-compose.prod.yml**:
 
 ```yaml
-version: '3.8'
-
 services:
-  # Frontend Service
+  # Frontend with Nginx
   frontend:
+    container_name: frontend
     build:
       context: ./frontend
       dockerfile: Dockerfile
+      args:
+        - REACT_APP_API_URL=${REACT_APP_API_URL:-https://api.your-domain.com}
+    image: img-frontend:${FRONTEND_IMAGE_TAG:-latest}
     ports:
-      - "80:80"
-      - "443:443"
-    environment:
-      - REACT_APP_API_URL=https://api.your-domain.com
-    volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./ssl:/etc/nginx/ssl:ro
+      - "3000:3000"
+    restart: unless-stopped
     depends_on:
       - backend
-    restart: unless-stopped
     networks:
       - todolist-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
 
   # Backend Service
   backend:
+    container_name: backend
+    image: img-backend:${BACKEND_IMAGE_TAG:-latest}
     build:
       context: ./backend
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://database:5432/todolist
-      - SPRING_DATASOURCE_USERNAME=${DB_USERNAME}
-      - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
-      - SPRING_JPA_HIBERNATE_DDL_AUTO=validate
-      - JAEGER_AGENT_HOST=jaeger
+      # Database Configuration
+      - SPRING_DATASOURCE_URL=${SPRING_DATASOURCE_URL}
+      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USER}
+      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD}
+
+      # Jaeger Tracing Configuration
+      - JAEGER_SERVICE_NAME=${JAEGER_SERVICE_NAME:-todo-list-backend}
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4318
+      - OTEL_SERVICE_NAME=${JAEGER_SERVICE_NAME:-todo-list-backend}
+      - OTEL_TRACES_EXPORTER=otlp
+      - OTEL_METRICS_EXPORTER=none
+      - OTEL_LOGS_EXPORTER=none
+
+      # Spring Boot Actuator
+      - MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE=health,info,prometheus,metrics
+      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
     depends_on:
-      - database
-      - jaeger
+      database:
+        condition: service_healthy
+      jaeger:
+        condition: service_started
     restart: unless-stopped
     networks:
       - todolist-network
@@ -192,53 +202,79 @@ services:
 
   # Database Service
   database:
-    image: postgres:15-alpine
+    container_name: database
+    image: img-database:${DATABASE_IMAGE_TAG:-latest}
+    build:
+      context: ./backend/database/
+      dockerfile: Dockerfile
     environment:
-      - POSTGRES_DB=todolist
-      - POSTGRES_USER=${DB_USERNAME}
-      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
     volumes:
-      - postgres_data:/var/lib/postgresql/data
-      - ./backend/database/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+      - db-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
     restart: unless-stopped
     networks:
       - todolist-network
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME}"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
       interval: 10s
       timeout: 5s
       retries: 5
+      start_period: 10s
 
   # Jaeger Tracing
   jaeger:
+    container_name: jaeger
     image: jaegertracing/all-in-one:latest
-    ports:
-      - "16686:16686"
-      - "6831:6831/udp"
+    restart: always
     environment:
       - COLLECTOR_ZIPKIN_HOST_PORT=:9411
-    restart: unless-stopped
+      - COLLECTOR_OTLP_ENABLED=true
+    ports:
+      # Jaeger UI
+      - "16686:16686"
+      # Collector HTTP
+      - "14268:14268"
+      # Collector gRPC
+      - "14250:14250"
+      # Agent (Thrift compact)
+      - "6831:6831/udp"
+      # Agent (Thrift binary)
+      - "6832:6832/udp"
+      # Admin port
+      - "14269:14269"
+      # OTLP gRPC
+      - "4317:4317"
+      # OTLP HTTP
+      - "4318:4318"
+      # Zipkin compatible endpoint
+      - "9411:9411"
     networks:
       - todolist-network
 
-volumes:
-  postgres_data:
-    driver: local
-
 networks:
   todolist-network:
+    name: todolist-network
     driver: bridge
+
+volumes:
+  db-data:
+    name: volume-database
+    driver: local
 ```
 
 ### Deploy with Docker Compose
 
 ```bash
-# Set environment variables
-export DB_USERNAME=your_db_user
-export DB_PASSWORD=your_secure_password
+# Set environment variables for production
+cp .env.example .env.production
+nano .env.production
 
-# Pull latest images
-docker-compose -f docker-compose.prod.yml pull
+# Load production environment
+export $(cat .env.production | xargs)
 
 # Build and start services
 docker-compose -f docker-compose.prod.yml up -d --build
@@ -250,22 +286,71 @@ docker-compose -f docker-compose.prod.yml logs -f
 docker-compose -f docker-compose.prod.yml ps
 ```
 
-### Nginx Configuration for Frontend
+### Nginx Reverse Proxy (Optional)
 
-Create **nginx/nginx.conf**:
+If you want to use Nginx as a reverse proxy on your host machine:
+
+Create **/etc/nginx/sites-available/todolist**:
 
 ```nginx
-events {
-    worker_connections 1024;
+# Redirect HTTP to HTTPS
+server {
+    listen 80;
+    listen [::]:80;
+    server_name your-domain.com www.your-domain.com;
+
+    return 301 https://$server_name$request_uri;
 }
 
-http {
-    include /etc/nginx/mime.types;
-    default_type application/octet-stream;
+# HTTPS Server
+server {
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
+    server_name your-domain.com www.your-domain.com;
 
-    # Logging
-    access_log /var/log/nginx/access.log;
-    error_log /var/log/nginx/error.log;
+    # SSL Configuration (Let's Encrypt)
+    ssl_certificate /etc/letsencrypt/live/your-domain.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/your-domain.com/privkey.pem;
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_ciphers HIGH:!aNULL:!MD5;
+    ssl_prefer_server_ciphers on;
+
+    # Security Headers
+    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+    add_header X-Frame-Options "SAMEORIGIN" always;
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header X-XSS-Protection "1; mode=block" always;
+
+    # Frontend
+    location / {
+        proxy_pass http://localhost:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    # Backend API
+    location /api/ {
+        proxy_pass http://localhost:8080;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    # Actuator endpoints (restrict in production)
+    location /actuator/ {
+        # deny all;  # Uncomment to disable external access
+        proxy_pass http://localhost:8080;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+    }
 
     # Gzip compression
     gzip on;
@@ -274,355 +359,35 @@ http {
     gzip_types text/plain text/css text/xml text/javascript
                application/x-javascript application/xml+rss
                application/json application/javascript;
-
-    # Frontend server
-    server {
-        listen 80;
-        listen [::]:80;
-        server_name your-domain.com www.your-domain.com;
-
-        # Redirect HTTP to HTTPS
-        return 301 https://$server_name$request_uri;
-    }
-
-    server {
-        listen 443 ssl http2;
-        listen [::]:443 ssl http2;
-        server_name your-domain.com www.your-domain.com;
-
-        # SSL Configuration
-        ssl_certificate /etc/nginx/ssl/fullchain.pem;
-        ssl_certificate_key /etc/nginx/ssl/privkey.pem;
-        ssl_protocols TLSv1.2 TLSv1.3;
-        ssl_ciphers HIGH:!aNULL:!MD5;
-        ssl_prefer_server_ciphers on;
-
-        # Security headers
-        add_header X-Frame-Options "SAMEORIGIN" always;
-        add_header X-Content-Type-Options "nosniff" always;
-        add_header X-XSS-Protection "1; mode=block" always;
-        add_header Referrer-Policy "no-referrer-when-downgrade" always;
-        add_header Content-Security-Policy "default-src 'self' http: https: data: blob: 'unsafe-inline'" always;
-
-        root /usr/share/nginx/html;
-        index index.html;
-
-        # React routing
-        location / {
-            try_files $uri $uri/ /index.html;
-        }
-
-        # API proxy
-        location /api/ {
-            proxy_pass http://backend:8080/api/;
-            proxy_http_version 1.1;
-            proxy_set_header Upgrade $http_upgrade;
-            proxy_set_header Connection 'upgrade';
-            proxy_set_header Host $host;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-            proxy_set_header X-Forwarded-Proto $scheme;
-            proxy_cache_bypass $http_upgrade;
-        }
-
-        # Cache static assets
-        location ~* \.(jpg|jpeg|png|gif|ico|css|js|svg|woff|woff2|ttf|eot)$ {
-            expires 1y;
-            add_header Cache-Control "public, immutable";
-        }
-    }
 }
 ```
 
----
+Enable and restart Nginx:
 
-## Cloud Platforms
-
-### AWS Deployment
-
-#### Option 1: EC2 + RDS
-
-**Step 1: Launch EC2 Instance**
 ```bash
-# Launch Ubuntu 22.04 LTS instance
-# Instance type: t3.medium or larger
-# Security group: Allow ports 22, 80, 443, 8080
+# Enable site
+sudo ln -s /etc/nginx/sites-available/todolist /etc/nginx/sites-enabled/
+
+# Test configuration
+sudo nginx -t
+
+# Reload Nginx
+sudo systemctl reload nginx
 ```
 
-**Step 2: Setup RDS PostgreSQL**
-```bash
-# Create RDS PostgreSQL instance
-# Engine: PostgreSQL 15
-# Instance class: db.t3.micro for testing, db.t3.medium for production
-# Storage: 20GB SSD
-# Enable automated backups
-# Note the endpoint URL
-```
+### SSL Certificate with Let's Encrypt
 
-**Step 3: Deploy Application**
-```bash
-# SSH into EC2 instance
-ssh -i your-key.pem ubuntu@your-ec2-ip
-
-# Install Docker
-curl -fsSL https://get.docker.com -o get-docker.sh
-sudo sh get-docker.sh
-sudo usermod -aG docker ubuntu
-
-# Install Docker Compose
-sudo curl -L "https://github.com/docker/compose/releases/download/v2.20.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-sudo chmod +x /usr/local/bin/docker-compose
-
-# Clone and deploy
-git clone https://github.com/robertfeo/hse-distsys-ws23.git
-cd hse-distsys-ws23
-
-# Configure environment
-export DB_USERNAME=postgres
-export DB_PASSWORD=your_rds_password
-export SPRING_DATASOURCE_URL=jdbc:postgresql://your-rds-endpoint:5432/todolist
-
-# Deploy
-docker-compose -f docker-compose.prod.yml up -d
-```
-
-**Step 4: Configure Load Balancer (Optional)**
-- Create Application Load Balancer
-- Configure target group for backend (port 8080)
-- Configure SSL certificate via AWS Certificate Manager
-- Point domain to load balancer
-
-#### Option 2: ECS Fargate
-
-**Step 1: Create ECR Repositories**
-```bash
-# Create repositories for frontend and backend
-aws ecr create-repository --repository-name todolist-frontend
-aws ecr create-repository --repository-name todolist-backend
-
-# Login to ECR
-aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin your-account-id.dkr.ecr.us-east-1.amazonaws.com
-
-# Build and push images
-docker build -t todolist-frontend ./frontend
-docker tag todolist-frontend:latest your-account-id.dkr.ecr.us-east-1.amazonaws.com/todolist-frontend:latest
-docker push your-account-id.dkr.ecr.us-east-1.amazonaws.com/todolist-frontend:latest
-
-docker build -t todolist-backend ./backend
-docker tag todolist-backend:latest your-account-id.dkr.ecr.us-east-1.amazonaws.com/todolist-backend:latest
-docker push your-account-id.dkr.ecr.us-east-1.amazonaws.com/todolist-backend:latest
-```
-
-**Step 2: Create ECS Cluster and Task Definitions**
-- Create ECS cluster
-- Define task definitions for frontend and backend
-- Configure service with desired count
-- Set up Application Load Balancer
-- Configure auto-scaling policies
-
----
-
-### Azure Deployment
-
-#### Option 1: Azure App Service
-
-**Step 1: Create Resources**
-```bash
-# Login to Azure
-az login
-
-# Create resource group
-az group create --name todolist-rg --location eastus
-
-# Create PostgreSQL database
-az postgres flexible-server create \
-  --resource-group todolist-rg \
-  --name todolist-db \
-  --location eastus \
-  --admin-user adminuser \
-  --admin-password YourPassword123! \
-  --sku-name Standard_B1ms \
-  --version 15
-
-# Create database
-az postgres flexible-server db create \
-  --resource-group todolist-rg \
-  --server-name todolist-db \
-  --database-name todolist
-```
-
-**Step 2: Deploy Backend**
-```bash
-# Create App Service plan
-az appservice plan create \
-  --name todolist-plan \
-  --resource-group todolist-rg \
-  --is-linux \
-  --sku B1
-
-# Create web app for backend
-az webapp create \
-  --resource-group todolist-rg \
-  --plan todolist-plan \
-  --name todolist-backend \
-  --runtime "JAVA:17-java17"
-
-# Configure app settings
-az webapp config appsettings set \
-  --resource-group todolist-rg \
-  --name todolist-backend \
-  --settings \
-    SPRING_DATASOURCE_URL="jdbc:postgresql://todolist-db.postgres.database.azure.com:5432/todolist" \
-    SPRING_DATASOURCE_USERNAME="adminuser" \
-    SPRING_DATASOURCE_PASSWORD="YourPassword123!"
-
-# Deploy backend JAR
-cd backend
-mvn clean package -DskipTests
-az webapp deploy \
-  --resource-group todolist-rg \
-  --name todolist-backend \
-  --src-path target/backend-v1.0.0.jar \
-  --type jar
-```
-
-**Step 3: Deploy Frontend**
-```bash
-# Create web app for frontend
-az webapp create \
-  --resource-group todolist-rg \
-  --plan todolist-plan \
-  --name todolist-frontend \
-  --runtime "NODE:18-lts"
-
-# Build frontend
-cd frontend
-npm install
-REACT_APP_API_URL=https://todolist-backend.azurewebsites.net npm run build
-
-# Deploy frontend
-az webapp up \
-  --resource-group todolist-rg \
-  --name todolist-frontend \
-  --html \
-  --src-path ./build
-```
-
----
-
-### Google Cloud Platform
-
-#### Using Cloud Run + Cloud SQL
-
-**Step 1: Setup Cloud SQL**
-```bash
-# Create Cloud SQL instance
-gcloud sql instances create todolist-db \
-  --database-version=POSTGRES_15 \
-  --cpu=1 \
-  --memory=3840MB \
-  --region=us-central1 \
-  --root-password=your-secure-password
-
-# Create database
-gcloud sql databases create todolist --instance=todolist-db
-```
-
-**Step 2: Build and Deploy Backend**
-```bash
-# Enable required APIs
-gcloud services enable run.googleapis.com
-gcloud services enable containerregistry.googleapis.com
-
-# Build backend image
-cd backend
-gcloud builds submit --tag gcr.io/your-project-id/todolist-backend
-
-# Deploy to Cloud Run
-gcloud run deploy todolist-backend \
-  --image gcr.io/your-project-id/todolist-backend \
-  --platform managed \
-  --region us-central1 \
-  --allow-unauthenticated \
-  --add-cloudsql-instances your-project-id:us-central1:todolist-db \
-  --set-env-vars SPRING_DATASOURCE_URL="jdbc:postgresql:///todolist?cloudSqlInstance=your-project-id:us-central1:todolist-db&socketFactory=com.google.cloud.sql.postgres.SocketFactory" \
-  --set-env-vars SPRING_DATASOURCE_USERNAME=postgres \
-  --set-env-vars SPRING_DATASOURCE_PASSWORD=your-secure-password
-```
-
-**Step 3: Deploy Frontend**
-```bash
-# Build frontend image
-cd frontend
-gcloud builds submit --tag gcr.io/your-project-id/todolist-frontend
-
-# Deploy to Cloud Run
-gcloud run deploy todolist-frontend \
-  --image gcr.io/your-project-id/todolist-frontend \
-  --platform managed \
-  --region us-central1 \
-  --allow-unauthenticated \
-  --set-env-vars REACT_APP_API_URL=https://todolist-backend-xxxxx.run.app
-```
-
----
-
-### DigitalOcean Deployment
-
-#### Using Droplet + Managed Database
-
-**Step 1: Create Managed PostgreSQL Database**
-- Create database cluster via DigitalOcean console
-- Note connection details
-
-**Step 2: Create and Setup Droplet**
-```bash
-# Create Ubuntu 22.04 droplet (minimum $12/month)
-# Add your SSH key
-
-# SSH into droplet
-ssh root@your-droplet-ip
-
-# Update system
-apt update && apt upgrade -y
-
-# Install Docker
-curl -fsSL https://get.docker.com -o get-docker.sh
-sh get-docker.sh
-
-# Install Docker Compose
-curl -L "https://github.com/docker/compose/releases/download/v2.20.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-chmod +x /usr/local/bin/docker-compose
-
-# Clone repository
-git clone https://github.com/robertfeo/hse-distsys-ws23.git
-cd hse-distsys-ws23
-
-# Configure environment
-nano .env
-
-# Deploy
-docker-compose -f docker-compose.prod.yml up -d
-```
-
-**Step 3: Configure Firewall**
-```bash
-# Allow SSH, HTTP, HTTPS
-ufw allow 22
-ufw allow 80
-ufw allow 443
-ufw enable
-```
-
-**Step 4: Setup SSL with Certbot**
 ```bash
 # Install Certbot
-apt install certbot python3-certbot-nginx -y
+sudo apt update
+sudo apt install certbot python3-certbot-nginx -y
 
 # Obtain SSL certificate
-certbot --nginx -d your-domain.com -d www.your-domain.com
+sudo certbot --nginx -d your-domain.com -d www.your-domain.com
 
 # Auto-renewal is configured automatically
+# Test renewal
+sudo certbot renew --dry-run
 ```
 
 ---
@@ -632,41 +397,46 @@ certbot --nginx -d your-domain.com -d www.your-domain.com
 ### Security
 - [ ] SSL/TLS certificate configured
 - [ ] HTTPS enabled and HTTP redirects to HTTPS
-- [ ] Database credentials stored in secrets/environment variables
+- [ ] Database credentials stored in environment variables
+- [ ] Strong passwords used (minimum 16 characters)
 - [ ] CORS configured for production domains only
 - [ ] Security headers configured (CSP, X-Frame-Options, etc.)
 - [ ] Database access restricted to application servers only
-- [ ] Firewall rules configured
+- [ ] Firewall rules configured (allow only 22, 80, 443)
 - [ ] Regular security updates scheduled
+- [ ] Actuator endpoints restricted or disabled
+- [ ] `.env` files not committed to Git
 
 ### Performance
 - [ ] Database indexes created
 - [ ] Connection pooling configured
 - [ ] Gzip compression enabled
 - [ ] Static assets cached
-- [ ] CDN configured for static assets (optional)
 - [ ] Database query optimization
-- [ ] Backend response caching (if applicable)
+- [ ] JVM memory settings optimized
+- [ ] Docker resource limits configured
 
 ### Monitoring
 - [ ] Health check endpoints configured
-- [ ] Logging configured and centralized
+- [ ] Logging configured and accessible
 - [ ] Metrics collection enabled (Prometheus)
 - [ ] Distributed tracing configured (Jaeger)
 - [ ] Alerting configured for critical issues
-- [ ] Uptime monitoring (UptimeRobot, Pingdom, etc.)
+- [ ] Uptime monitoring configured
 
 ### Backup & Recovery
 - [ ] Automated database backups configured
-- [ ] Backup retention policy defined
+- [ ] Backup retention policy defined (e.g., 30 days)
 - [ ] Backup restoration tested
 - [ ] Disaster recovery plan documented
+- [ ] Database dumps stored securely
 
 ### Documentation
 - [ ] Deployment process documented
 - [ ] Environment variables documented
 - [ ] Rollback procedure documented
 - [ ] Troubleshooting guide available
+- [ ] Team contacts documented
 
 ---
 
@@ -676,13 +446,16 @@ certbot --nginx -d your-domain.com -d www.your-domain.com
 
 ```bash
 # Backend health
-curl https://api.your-domain.com/actuator/health
+curl http://localhost:8080/actuator/health
 
 # Database health
-curl https://api.your-domain.com/actuator/health/db
+curl http://localhost:8080/actuator/health/db
 
 # Prometheus metrics
-curl https://api.your-domain.com/actuator/prometheus
+curl http://localhost:8080/actuator/prometheus
+
+# Jaeger UI
+open http://localhost:16686
 ```
 
 ### Log Management
@@ -695,19 +468,31 @@ docker-compose logs -f database
 
 # Tail specific service
 docker-compose logs -f --tail=100 backend
+
+# Search logs
+docker-compose logs backend | grep ERROR
+
+# Export logs
+docker-compose logs --no-color > application.log
 ```
 
 ### Database Maintenance
 
 ```bash
 # Backup database
-docker exec todolist-database pg_dump -U postgres todolist > backup_$(date +%Y%m%d).sql
+docker exec database pg_dump -U ${POSTGRES_USER} ${POSTGRES_DB} > backup_$(date +%Y%m%d_%H%M%S).sql
 
 # Restore database
-docker exec -i todolist-database psql -U postgres todolist < backup_20231031.sql
+docker exec -i database psql -U ${POSTGRES_USER} ${POSTGRES_DB} < backup_20231031_120000.sql
 
 # Connect to database
-docker exec -it todolist-database psql -U postgres -d todolist
+docker exec -it database psql -U ${POSTGRES_USER} -d ${POSTGRES_DB}
+
+# Database size
+docker exec database psql -U ${POSTGRES_USER} -d ${POSTGRES_DB} -c "SELECT pg_size_pretty(pg_database_size('${POSTGRES_DB}'));"
+
+# List tables
+docker exec database psql -U ${POSTGRES_USER} -d ${POSTGRES_DB} -c "\dt"
 ```
 
 ### Application Updates
@@ -717,12 +502,33 @@ docker exec -it todolist-database psql -U postgres -d todolist
 git pull origin main
 
 # Rebuild and restart services
-docker-compose -f docker-compose.prod.yml up -d --build
+docker-compose up -d --build
 
-# Zero-downtime deployment (with load balancer)
-# 1. Update one instance
-# 2. Verify health
-# 3. Update remaining instances
+# Check service status
+docker-compose ps
+
+# View updated service logs
+docker-compose logs -f backend
+
+# Rollback if needed
+git checkout previous-commit-hash
+docker-compose up -d --build
+```
+
+### Performance Monitoring
+
+```bash
+# Container resource usage
+docker stats
+
+# Container processes
+docker-compose top
+
+# Disk usage
+docker system df
+
+# Clean up unused resources
+docker system prune -a
 ```
 
 ---
@@ -731,7 +537,8 @@ docker-compose -f docker-compose.prod.yml up -d --build
 
 ### Common Issues
 
-**Backend can't connect to database:**
+#### Backend can't connect to database
+
 ```bash
 # Check database is running
 docker-compose ps database
@@ -739,51 +546,187 @@ docker-compose ps database
 # Check database logs
 docker-compose logs database
 
-# Verify connection string
-echo $SPRING_DATASOURCE_URL
+# Verify environment variables
+docker exec backend env | grep DATASOURCE
 
 # Test database connectivity
 docker exec backend ping database
+
+# Check database health
+docker exec database pg_isready -U ${POSTGRES_USER}
 ```
 
-**Frontend can't reach backend:**
+#### Frontend can't reach backend
+
 ```bash
-# Check CORS configuration
-# Verify REACT_APP_API_URL is correct
+# Check REACT_APP_API_URL configuration
+docker exec frontend env | grep REACT_APP_API_URL
+
+# Check backend is running
+curl http://localhost:8080/actuator/health
+
 # Check backend logs for CORS errors
 docker-compose logs backend | grep CORS
+
+# Verify network connectivity
+docker exec frontend ping backend
 ```
 
-**High memory usage:**
+#### Jaeger not showing traces
+
+```bash
+# Check Jaeger is running
+docker-compose ps jaeger
+
+# Check Jaeger UI
+open http://localhost:16686
+
+# Check backend tracing configuration
+docker exec backend env | grep OTEL
+
+# Check backend logs for tracing errors
+docker-compose logs backend | grep -i "otlp\|tracing\|jaeger"
+
+# Make test requests to generate traces
+curl http://localhost:8080/api/todos
+
+# Check Jaeger API for services
+curl http://localhost:16686/api/services
+```
+
+#### High memory usage
+
 ```bash
 # Check container stats
 docker stats
 
 # Adjust JVM memory settings (backend)
-# Add to docker-compose.yml:
-environment:
-  - JAVA_OPTS=-Xmx512m -Xms256m
+# Add to docker-compose.yml environment:
+JAVA_OPTS=-Xmx512m -Xms256m
+
+# Restart backend
+docker-compose up -d backend
 ```
 
-**Database performance issues:**
-```bash
-# Connect to database and analyze slow queries
-docker exec -it todolist-database psql -U postgres -d todolist
+#### Database performance issues
 
-# Enable query logging
-ALTER DATABASE todolist SET log_statement = 'all';
-ALTER DATABASE todolist SET log_duration = on;
+```bash
+# Connect to database
+docker exec -it database psql -U ${POSTGRES_USER} -d ${POSTGRES_DB}
+
+# Check active connections
+SELECT count(*) FROM pg_stat_activity;
+
+# Check slow queries
+SELECT query, calls, total_time, mean_time
+FROM pg_stat_statements
+ORDER BY mean_time DESC
+LIMIT 10;
 
 # Check for missing indexes
-SELECT schemaname, tablename, indexname FROM pg_indexes WHERE schemaname = 'public';
+SELECT schemaname, tablename, indexname
+FROM pg_indexes
+WHERE schemaname = 'public';
+```
+
+#### Port conflicts
+
+```bash
+# Check what's using port 8080
+sudo lsof -i :8080
+
+# Check what's using port 3000
+sudo lsof -i :3000
+
+# Kill process using port
+sudo kill -9 <PID>
+
+# Or change port in docker-compose.yml
+ports:
+  - "8081:8080"  # Use different host port
+```
+
+#### Docker build failures
+
+```bash
+# Clean build cache
+docker-compose build --no-cache
+
+# Remove all containers and volumes
+docker-compose down -v
+
+# Remove dangling images
+docker image prune
+
+# Full cleanup
+docker system prune -a --volumes
 ```
 
 ### Getting Help
 
-- Check application logs
-- Review [Architecture Documentation](../architecture/ARCHITECTURE.md)
-- Search [GitHub Issues](https://github.com/robertfeo/hse-distsys-ws23/issues)
-- Contact: [your.email@example.com](mailto:your.email@example.com)
+1. **Check Logs**: Always start by checking container logs
+   ```bash
+   docker-compose logs -f
+   ```
+
+2. **Review Documentation**:
+   - [Architecture Documentation](../architecture/ARCHITECTURE.md)
+   - [API Documentation](../API_DOCUMENTATION.md)
+   - [Environment Setup](../ENVIRONMENT_SETUP.md)
+
+3. **GitHub Issues**: [https://github.com/robertfeo/hse-distsys-ws23/issues](https://github.com/robertfeo/hse-distsys-ws23/issues)
+
+4. **Contact**: For support, create an issue on GitHub
+
+---
+
+## Performance Optimization
+
+### Docker Optimization
+
+```yaml
+# Add resource limits to docker-compose.yml
+services:
+  backend:
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+```
+
+### Database Optimization
+
+```sql
+-- Create indexes for better query performance
+CREATE INDEX idx_todo_item_checked ON todo_item(is_checked);
+CREATE INDEX idx_todo_item_created_at ON todo_item(created_at);
+
+-- Analyze tables
+ANALYZE todo_item;
+
+-- Vacuum database
+VACUUM ANALYZE;
+```
+
+### Backend Optimization
+
+Add to [application.properties](../../backend/src/main/resources/application.properties):
+
+```properties
+# Connection pooling
+spring.datasource.hikari.maximum-pool-size=10
+spring.datasource.hikari.minimum-idle=5
+spring.datasource.hikari.connection-timeout=30000
+
+# JPA optimization
+spring.jpa.hibernate.ddl-auto=validate
+spring.jpa.show-sql=false
+spring.jpa.properties.hibernate.format_sql=false
+```
 
 ---
 

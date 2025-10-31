@@ -20,6 +20,7 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.merge_commit_sha }}
           fetch-depth: "0"
+
       - name: Bump version and push tag
         uses: anothrNick/github-tag-action@1.67.0
         id: tag_version
@@ -31,19 +32,35 @@ jobs:
           MAJOR_STRING_TOKEN: major
           MINOR_STRING_TOKEN: minor
           PATCH_STRING_TOKEN: patch
+
       - name: Get base semantic version
         run: echo "BASE_SEMANTIC_VERSION=$(echo ${{ steps.tag_version.outputs.new_tag }})" >> $GITHUB_ENV
+
+      - name: Check if new tag was created
+        id: check_tag
+        run: |
+          if [ "${{ steps.tag_version.outputs.new_tag }}" != "" ]; then
+            echo "new_tag_created=true" >> $GITHUB_OUTPUT
+          else
+            echo "new_tag_created=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: Create a GitHub release
+        if: steps.check_tag.outputs.new_tag_created == 'true'
         uses: ncipollo/release-action@v1
         with:
           tag: ${{ env.BASE_SEMANTIC_VERSION }}
           name: Release ${{ env.BASE_SEMANTIC_VERSION }}
+          skipIfReleaseExists: true
       - name: Login to Docker Hub
+        if: steps.check_tag.outputs.new_tag_created == 'true'
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_REGISTRY_USERNAME }}
           password: ${{ secrets.DOCKER_REGISTRY_PASSWORD }}
+
       - name: Docker meta for backend
+        if: steps.check_tag.outputs.new_tag_created == 'true'
         id: meta_backend
         uses: docker/metadata-action@v5
         with:
@@ -51,7 +68,9 @@ jobs:
             rofeit00/todo-backend
           tags: |
             type=raw,value=${{ env.BASE_SEMANTIC_VERSION }}
+
       - name: Docker meta for frontend
+        if: steps.check_tag.outputs.new_tag_created == 'true'
         id: meta_frontend
         uses: docker/metadata-action@v5
         with:
@@ -59,7 +78,9 @@ jobs:
             rofeit00/todo-frontend
           tags: |
             type=raw,value=${{ env.BASE_SEMANTIC_VERSION }}
+
       - name: Build and push backend
+        if: steps.check_tag.outputs.new_tag_created == 'true'
         uses: docker/build-push-action@v5
         with:
           context: ./backend
@@ -67,7 +88,9 @@ jobs:
           tags: |
             ${{ steps.meta_backend.outputs.tags }}
             rofeit00/todo-backend:latest
+
       - name: Build and push frontend
+        if: steps.check_tag.outputs.new_tag_created == 'true'
         uses: docker/build-push-action@v5
         with:
           context: ./frontend
