@@ -133,7 +133,7 @@ After you have screenshots, add this section to README.md before "Quick Start":
 ```markdown
 ## 👨‍💻 Contact
 
-**Robert Feo**
+**Robert-Bogdan Fesko**
 
 - 📧 Email: [YOUR_EMAIL@example.com](mailto:YOUR_EMAIL@example.com)
 - 💼 LinkedIn: [linkedin.com/in/YOUR_PROFILE](https://linkedin.com/in/YOUR_PROFILE)
@@ -429,7 +429,7 @@ Good luck with your job search! 🚀
 ---
 
 **Created:** October 2025
-**For:** Robert Feo
+**For:** Robert-Bogdan Fesko
 **By:** Claude Code Assistant
 
 ---
@@ -570,7 +570,7 @@ Nachdem Sie Screenshots haben, fügen Sie diesen Abschnitt zur README.md vor "Qu
 ```markdown
 ## 👨‍💻 Kontakt
 
-**Robert Feo**
+**Robert-Bogdan Fesko**
 
 - 📧 Email: [IHRE_EMAIL@example.com](mailto:IHRE_EMAIL@example.com)
 - 💼 LinkedIn: [linkedin.com/in/IHR_PROFIL](https://linkedin.com/in/IHR_PROFIL)
@@ -723,5 +723,5 @@ Viel Erfolg bei Ihrer Jobsuche! 🚀
 ---
 
 **Erstellt:** Oktober 2025
-**Für:** Robert Feo
+**Für:** Robert-Bogdan Fesko
 **Von:** Claude Code Assistant

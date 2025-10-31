@@ -45,8 +45,7 @@ This project was developed as part of the **HSE Distributed Systems course (Wint
 
 - ✅ **Production-Ready Architecture**: Clean layered architecture with separation of concerns
 - ✅ **Enterprise Technologies**: Spring Boot, React, PostgreSQL, Docker
-- ✅ **Observability Built-In**: Jaeger distributed tracing, Prometheus metrics
-- ✅ **Automated CI/CD**: GitHub Actions pipeline with automated testing and deployment
+- ✅ **Observability Built-In**: Jaeger distributed tracing for request monitoring
 - ✅ **Comprehensive Documentation**: Architecture diagrams, API docs, deployment guides
 - ✅ **Best Practices**: RESTful API design, DTO pattern, error handling, testing
 - ✅ **Containerized**: Docker Compose for one-command deployment
@@ -68,8 +67,6 @@ This project was developed as part of the **HSE Distributed Systems course (Wint
 - 💾 **Data Persistence**: PostgreSQL with JPA/Hibernate
 - 🐳 **Containerized**: Docker and Docker Compose setup
 - 📊 **Distributed Tracing**: Jaeger integration for request tracking
-- 📈 **Metrics Collection**: Prometheus integration
-- 🔄 **CI/CD Pipeline**: Automated testing and deployment
 - 🧪 **Comprehensive Testing**: Unit and integration tests
 
 ---
@@ -102,12 +99,9 @@ This project was developed as part of the **HSE Distributed Systems course (Wint
 
 ### DevOps & Infrastructure
 ![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
-![GitHub Actions](https://img.shields.io/badge/github%20actions-%232671E5.svg?style=for-the-badge&logo=githubactions&logoColor=white)
 
 - **Docker & Docker Compose** - Containerization
-- **GitHub Actions** - CI/CD automation
 - **Jaeger** - Distributed tracing
-- **Prometheus** - Metrics collection
 - **Micrometer** - Application metrics
 
 ---
@@ -408,14 +402,6 @@ npm run build
 # Serve the 'build' folder with nginx or your preferred web server
 ```
 
-### Cloud Deployment
-
-Guides available for:
-- ☁️ **AWS (EC2, ECS, RDS)**: [docs/deployment/AWS.md](docs/deployment/AWS.md)
-- 🔵 **Azure (App Service)**: [docs/deployment/AZURE.md](docs/deployment/AZURE.md)
-- 🌐 **Google Cloud Platform**: [docs/deployment/GCP.md](docs/deployment/GCP.md)
-- 🎯 **DigitalOcean**: [docs/deployment/DIGITALOCEAN.md](docs/deployment/DIGITALOCEAN.md)
-
 ---
 
 ## 📊 Observability
@@ -516,27 +502,24 @@ Contributions are welcome! Please read our [Contributing Guidelines](CONTRIBUTIN
 This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
 
 ```
-MIT License - Copyright (c) 2023-2025 Robert Feo
+MIT License - Copyright (c) 2023-2025 Robert-Bogdan Fesko
 ```
 
 ---
 
 ## 👨‍💻 Contact
 
-**Robert Feo**
+**Robert-Bogdan Fesko**
 
-- 📧 Email: [your.email@example.com](mailto:your.email@example.com)
+- 📧 Email: [fesko.robert@gmail.com](mailto:fesko.robert@gmail.com)
 - 💼 LinkedIn: [linkedin.com/in/robertfeo](https://linkedin.com/in/robertfeo)
 - 🐙 GitHub: [@robertfeo](https://github.com/robertfeo)
-- 🌐 Portfolio: [yourportfolio.com](https://yourportfolio.com)
 
 ---
 
 ## 🙏 Acknowledgments
 
 - **HSE University** - Distributed Systems Course (WS 2023)
-- **Spring Boot Team** - Excellent documentation
-- **React Team** - Amazing framework
 - **Open Source Community** - For all the great tools
 
 ---
@@ -546,23 +529,14 @@ MIT License - Copyright (c) 2023-2025 Robert Feo
 - ✅ **Core Features**: Complete
 - ✅ **Documentation**: Comprehensive
 - ✅ **Testing**: Unit & Integration tests
-- ✅ **CI/CD**: Automated pipeline
 - ✅ **Containerization**: Docker ready
 - 🚧 **Authentication**: Planned enhancement
 - 🚧 **Real-time Updates**: WebSocket integration planned
 
 ---
 
-## 🌟 Star History
-
-If you find this project useful, please consider giving it a ⭐️!
-
-[![Star History Chart](https://api.star-history.com/svg?repos=robertfeo/hse-distsys-ws23&type=Date)](https://star-history.com/#robertfeo/hse-distsys-ws23&Date)
-
----
-
 <div align="center">
-  <p>Made with ❤️ and ☕ by Robert Feo</p>
+  <p>Made with ❤️ and ☕ by Robert-Bogdan Fesko</p>
   <p>
     <a href="#-table-of-contents">Back to Top ⬆️</a>
   </p>

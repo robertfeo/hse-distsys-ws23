@@ -308,4 +308,4 @@ This architecture provides a solid foundation for a production-ready application
 ---
 
 **Last Updated**: October 2025
-**Author**: Robert Feo
+**Author**: Robert-Bogdan Fesko

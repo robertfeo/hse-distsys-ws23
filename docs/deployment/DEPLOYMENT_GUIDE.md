@@ -731,4 +731,4 @@ spring.jpa.properties.hibernate.format_sql=false
 ---
 
 **Last Updated**: October 2025
-**Maintained by**: Robert Feo
+**Maintained by**: Robert-Bogdan Fesko

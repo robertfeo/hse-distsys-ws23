@@ -818,5 +818,5 @@ Response: Available metrics list
 
 **API Version**: 1.0.0
 **Last Updated**: October 2025
-**Author**: Robert Feo
+**Author**: Robert-Bogdan Fesko
 **Support**: [GitHub Issues](https://github.com/robertfeo/hse-distsys-ws23/issues)

@@ -316,9 +316,9 @@ For questions about the documentation:
 
 | Document | Version | Last Updated | Author |
 |----------|---------|--------------|--------|
-| API Documentation | 1.0 | Oct 2025 | Robert Feo |
-| Architecture | 1.0 | Oct 2025 | Robert Feo |
-| Deployment Guide | 1.0 | Oct 2025 | Robert Feo |
+| API Documentation | 1.0 | Oct 2025 | Robert-Bogdan Fesko |
+| Architecture | 1.0 | Oct 2025 | Robert-Bogdan Fesko |
+| Deployment Guide | 1.0 | Oct 2025 | Robert-Bogdan Fesko |
 
 ---
 
@@ -334,5 +334,5 @@ Documentation inspired by:
 
 <div align="center">
   <p><strong>Documentation is code</strong> - Keep it clean, tested, and updated!</p>
-  <p>Made with ❤️ by Robert Feo</p>
+  <p>Made with ❤️ by Robert-Bogdan Fesko</p>
 </div>

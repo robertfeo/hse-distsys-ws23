@@ -631,5 +631,5 @@ When modifying the pipeline:
 ---
 
 **Last Updated**: October 2025
-**Maintained by**: Robert Feo
+**Maintained by**: Robert-Bogdan Fesko
 **Pipeline Version**: 1.0

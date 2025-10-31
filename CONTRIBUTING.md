@@ -15,7 +15,7 @@ First off, thank you for considering contributing to this project! It's people l
 
 ## Code of Conduct
 
-This project and everyone participating in it is governed by our [Code of Conduct](CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code. Please report unacceptable behavior to [your.email@example.com](mailto:your.email@example.com).
+This project and everyone participating in it is governed by our [Code of Conduct](CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code. Please report unacceptable behavior to [fesko.robert@gmail.com](mailto:fesko.robert@gmail.com).
 
 ## Getting Started
 
@@ -521,7 +521,7 @@ Aim for:
  * Service class for managing todo items.
  * Provides CRUD operations and business logic for todos.
  *
- * @author Robert Feo
+ * @author Robert-Bogdan Fesko
  * @version 1.0
  */
 @Service
@@ -580,7 +580,7 @@ For significant architectural changes, update:
 
 - **Issues**: [GitHub Issues](https://github.com/robertfeo/hse-distsys-ws23/issues)
 - **Discussions**: [GitHub Discussions](https://github.com/robertfeo/hse-distsys-ws23/discussions)
-- **Email**: [your.email@example.com](mailto:your.email@example.com)
+- **Email**: [fesko.robert@gmail.com](mailto:fesko.robert@gmail.com)
 
 ### Recognition
 

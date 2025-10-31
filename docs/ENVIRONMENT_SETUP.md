@@ -474,7 +474,7 @@ Before deploying:
 ---
 
 **Last Updated:** October 2025
-**Author:** Robert Feo
+**Author:** Robert-Bogdan Fesko
 
 ---
 ---
@@ -590,4 +590,4 @@ JAEGER_SAMPLER_PARAM=0.1  # 10% der Anfragen samplen
 ---
 
 **Zuletzt aktualisiert:** Oktober 2025
-**Autor:** Robert Feo
+**Autor:** Robert-Bogdan Fesko
