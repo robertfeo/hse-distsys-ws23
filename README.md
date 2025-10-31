@@ -4,6 +4,7 @@
   <p><strong>A production-ready fullstack application showcasing modern web development practices</strong></p>
 
   [![CI/CD Pipeline](https://github.com/robertfeo/hse-distsys-ws23/actions/workflows/pipeline.yml/badge.svg)](https://github.com/robertfeo/hse-distsys-ws23/actions/workflows/pipeline.yml)
+  [![Publish](https://github.com/robertfeo/hse-distsys-ws23/actions/workflows/publish.yml/badge.svg)](https://github.com/robertfeo/hse-distsys-ws23/actions/workflows/publish.yml)
   [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
   [![Java](https://img.shields.io/badge/Java-17-orange.svg)](https://www.oracle.com/java/)
   [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.1.5-green.svg)](https://spring.io/projects/spring-boot)
