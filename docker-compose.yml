@@ -1,35 +1,54 @@
-version: "3.8"
 services:
   backend:
     container_name: backend
-    image: img-backend
+    image: img-backend:${BACKEND_IMAGE_TAG:-latest}
     build:
       context: ./backend/
       dockerfile: Dockerfile
     environment:
-      - OTEL_SERVICE_NAME=backend
+      # Database Configuration
+      - SPRING_DATASOURCE_URL=${SPRING_DATASOURCE_URL}
+      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USER}
+      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD}
+
+      # Jaeger Tracing Configuration (Spring Boot 3 + OpenTelemetry)
+      - JAEGER_SERVICE_NAME=${JAEGER_SERVICE_NAME:-todo-list-backend}
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4318
+      - OTEL_SERVICE_NAME=${JAEGER_SERVICE_NAME:-todo-list-backend}
+      - OTEL_TRACES_EXPORTER=otlp
       - OTEL_METRICS_EXPORTER=none
-      - OTEL_TRACES_EXPORTER=jaeger
-      - OTEL_EXPORTER_JAEGER_ENDPOINT=http://jaeger:14250
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://database:5432/todolist
+      - OTEL_LOGS_EXPORTER=none
+
+      # Spring Boot Actuator
+      - MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE=health,info,prometheus,metrics
+      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
     ports:
       - "8080:8080"
     depends_on:
-      - database
+      database:
+        condition: service_healthy
+      jaeger:
+        condition: service_started
     networks:
       - todolist-network
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
   database:
     container_name: database
-    image: img-database
+    image: img-database:${DATABASE_IMAGE_TAG:-latest}
     build:
       context: ./backend/database/
       dockerfile: Dockerfile
     environment:
-      - POSTGRES_USER=robert
-      - POSTGRES_PASSWORD=securepassword
-      - POSTGRES_DB=todolist
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
     volumes:
       - db-data:/var/lib/postgresql/data
     ports:
@@ -37,13 +56,21 @@ services:
     restart: unless-stopped
     networks:
       - todolist-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
 
   frontend:
     container_name: frontend
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    image: img-frontend
+      args:
+        - REACT_APP_API_URL=${REACT_APP_API_URL:-http://localhost:8080}
+    image: img-frontend:${FRONTEND_IMAGE_TAG:-latest}
     ports:
       - "3000:3000"
     restart: unless-stopped
@@ -51,15 +78,39 @@ services:
       - backend
     networks:
       - todolist-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
 
   jaeger:
     container_name: jaeger
     image: jaegertracing/all-in-one:latest
     restart: always
+    environment:
+      - COLLECTOR_ZIPKIN_HOST_PORT=:9411
+      - COLLECTOR_OTLP_ENABLED=true
     ports:
-      - "14250:14250"
-      - "14268:14268"
+      # Jaeger UI
       - "16686:16686"
+      # Collector HTTP
+      - "14268:14268"
+      # Collector gRPC
+      - "14250:14250"
+      # Agent (Thrift compact)
+      - "6831:6831/udp"
+      # Agent (Thrift binary)
+      - "6832:6832/udp"
+      # Admin port
+      - "14269:14269"
+      # OTLP gRPC
+      - "4317:4317"
+      # OTLP HTTP
+      - "4318:4318"
+      # Zipkin compatible endpoint
+      - "9411:9411"
     networks:
       - todolist-network
 

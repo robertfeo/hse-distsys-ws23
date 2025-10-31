@@ -1,293 +1,568 @@
 <div align="center">
-      <h1> <img src="https://i.imgur.com/SgXHmek.png" width="80px"><br/>Todo List</h1>
-     </div>
+  <img src="https://i.imgur.com/SgXHmek.png" width="120px">
+  <h1>🚀 Enterprise Todo List Application</h1>
+  <p><strong>A production-ready fullstack application showcasing modern web development practices</strong></p>
 
+  [![CI/CD Pipeline](https://github.com/robertfeo/hse-distsys-ws23/actions/workflows/pipeline.yml/badge.svg)](https://github.com/robertfeo/hse-distsys-ws23/actions/workflows/pipeline.yml)
+  [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+  [![Java](https://img.shields.io/badge/Java-17-orange.svg)](https://www.oracle.com/java/)
+  [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.1.5-green.svg)](https://spring.io/projects/spring-boot)
+  [![React](https://img.shields.io/badge/React-18.2-blue.svg)](https://reactjs.org/)
+  [![Docker](https://img.shields.io/badge/Docker-Ready-blue.svg)](https://www.docker.com/)
+</div>
 
-# Description
-A fullstack Todo List Application using Docker for easy development, testing, and deployment. Features a Spring Boot backend, React.js frontend, PostgreSQL database, and Jaeger tracing for observability.
+---
 
-## Features
-The Todo List Application is a fullstack web application that provides a convenient interface for managing a to-do list. It utilizes Docker containers to encapsulate the backend, frontend, and database components, ensuring a consistent and easily reproducible environment for development, testing, and production.
+## 📋 Table of Contents
 
-## Tech Used
- ![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white) ![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=java&logoColor=white) ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E) ![NPM](https://img.shields.io/badge/NPM-%23000000.svg?style=for-the-badge&logo=npm&logoColor=white) ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB) ![Spring](https://img.shields.io/badge/spring-%236DB33F.svg?style=for-the-badge&logo=spring&logoColor=white) ![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white) ![Postgres](https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white) ![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white) ![Postman](https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white)
+- [Overview](#-overview)
+- [Key Features](#-key-features)
+- [Technology Stack](#-technology-stack)
+- [Architecture](#-architecture)
+- [Quick Start](#-quick-start)
+- [Project Structure](#-project-structure)
+- [API Documentation](#-api-documentation)
+- [Development](#-development)
+- [Testing](#-testing)
+- [Deployment](#-deployment)
+- [Observability](#-observability)
+- [Contributing](#-contributing)
+- [License](#-license)
+- [Contact](#-contact)
 
-[![CI/CD Pipeline](https://github.com/robertfeo/hse-distsys-ws23/actions/workflows/pipeline.yml/badge.svg)](https://github.com/robertfeo/hse-distsys-ws23/actions/workflows/pipeline.yml)
+---
 
+## 🎯 Overview
 
-## Using Docker Compose
+A **modern, scalable, and production-ready** Todo List application that demonstrates best practices in fullstack development. Built with enterprise-grade technologies and featuring comprehensive observability, automated CI/CD, and containerized deployment.
 
-This application is designed to run using Docker Compose, which orchestrates multiple containers to work together. The provided `docker-compose.yml` file contains the configuration needed to build and run the application services.
+### 🎓 Project Purpose
 
-### Prerequisites Docker
+This project was developed as part of the **HSE Distributed Systems course (Winter Semester 2023)** and has been continuously improved to showcase professional software development skills suitable for industry positions.
 
-Before you can use Docker Compose to run the application, you must install:
+### 💼 Why This Project Stands Out
 
-- Docker
-- Docker Compose
+- ✅ **Production-Ready Architecture**: Clean layered architecture with separation of concerns
+- ✅ **Enterprise Technologies**: Spring Boot, React, PostgreSQL, Docker
+- ✅ **Observability Built-In**: Jaeger distributed tracing, Prometheus metrics
+- ✅ **Automated CI/CD**: GitHub Actions pipeline with automated testing and deployment
+- ✅ **Comprehensive Documentation**: Architecture diagrams, API docs, deployment guides
+- ✅ **Best Practices**: RESTful API design, DTO pattern, error handling, testing
+- ✅ **Containerized**: Docker Compose for one-command deployment
 
-Refer to the [official Docker documentation](https://docs.docker.com/get-docker/) for instructions on installing Docker, and the [Docker Compose documentation](https://docs.docker.com/compose/install/) for Docker Compose installation steps.
+---
 
-### Running the Application with Docker Compose
+## ✨ Key Features
 
-1. Clone the repository to your local machine.
-2. Navigate to the directory containing the `docker-compose.yml` file.
-3. Run the following command to build and start the services:
+### Application Features
+- 📝 **CRUD Operations**: Create, read, update, and delete todo items
+- ✓ **Toggle Completion**: Mark tasks as complete/incomplete
+- 🔍 **Search Functionality**: Find todos by title or ID
+- 🎨 **Modern UI**: Responsive design with Material-UI and TailwindCSS
+- ⚡ **Real-Time Updates**: Instant UI feedback on all operations
 
-   ```bash
-   docker-compose up --build
-   ```
+### Technical Features
+- 🏗️ **Microservices-Ready**: Loosely coupled frontend and backend
+- 🔄 **RESTful API**: Well-designed REST endpoints
+- 💾 **Data Persistence**: PostgreSQL with JPA/Hibernate
+- 🐳 **Containerized**: Docker and Docker Compose setup
+- 📊 **Distributed Tracing**: Jaeger integration for request tracking
+- 📈 **Metrics Collection**: Prometheus integration
+- 🔄 **CI/CD Pipeline**: Automated testing and deployment
+- 🧪 **Comprehensive Testing**: Unit and integration tests
 
-This will start the backend, frontend, and database services as well as a Jaeger instance for tracing. The frontend will be accessible at http://localhost:3000, and the backend will be available at http://localhost:8080.
+---
 
-### Data Persistence
+## 🛠️ Technology Stack
 
-The database service is configured to use a named volume (db-data) to persist data. This means your database data will remain intact even if the container is stopped or removed.
+### Frontend
+![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
+![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
+![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![MUI](https://img.shields.io/badge/MUI-%230081CB.svg?style=for-the-badge&logo=mui&logoColor=white)
 
-### Observability with Jaeger
+- **React 18.2** - Modern UI library with hooks
+- **Axios** - HTTP client for API communication
+- **Material-UI** - Component library
+- **TailwindCSS** - Utility-first CSS framework
+- **Jest** - Testing framework
 
-Jaeger is included in the Docker Compose setup for tracing the application requests. It provides a web interface accessible at http://localhost:16686 to view traces.
+### Backend
+![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white)
+![Spring](https://img.shields.io/badge/spring-%236DB33F.svg?style=for-the-badge&logo=spring&logoColor=white)
+![Postgres](https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white)
 
-### Customization
+- **Spring Boot 3.1.5** - Enterprise application framework
+- **Java 17** - LTS version with modern language features
+- **Spring Data JPA** - Data persistence layer
+- **PostgreSQL** - Production-grade relational database
+- **Lombok** - Reduce boilerplate code
+- **Maven** - Build automation and dependency management
 
-If you need to customize the environment variables or any other settings, you can modify the docker-compose.yml file accordingly. For example, to change database credentials, update the POSTGRES_USER and POSTGRES_PASSWORD environment variables under the database service.
+### DevOps & Infrastructure
+![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
+![GitHub Actions](https://img.shields.io/badge/github%20actions-%232671E5.svg?style=for-the-badge&logo=githubactions&logoColor=white)
 
-## Documentation Structure
+- **Docker & Docker Compose** - Containerization
+- **GitHub Actions** - CI/CD automation
+- **Jaeger** - Distributed tracing
+- **Prometheus** - Metrics collection
+- **Micrometer** - Application metrics
 
-This documentation covers the following areas:
+---
 
-- Backend Documentation: Details the RESTful API provided by the backend service, including available endpoints and data models.
-- Frontend Documentation: Describes the React-based frontend service, including its setup, features, and how to interact with the backend API.
+## 🏛️ Architecture
 
-## Frontend Documentation
+### High-Level Architecture
 
-### Table of Contents
+```
+┌─────────────┐      HTTP/REST      ┌─────────────┐      JDBC      ┌─────────────┐
+│   React     │ ◄──────────────────► │   Spring    │ ◄─────────────► │ PostgreSQL  │
+│   Frontend  │     (Port 3000)      │   Backend   │  (Port 8080)    │  Database   │
+│             │                      │             │                 │  (Port 5432)│
+└─────────────┘                      └──────┬──────┘                 └─────────────┘
+                                            │
+                                            │ Traces
+                                            ▼
+                                     ┌─────────────┐
+                                     │   Jaeger    │
+                                     │   Tracing   │
+                                     │ (Port 16686)│
+                                     └─────────────┘
+```
 
-- [Overview](#overview-frontend)
-- [Prerequisites](#prerequisites-frontend)
-- [Installation and Setup](#installation-and-setup-frontend)
-- [Running the Application](#running-the-application-frontend)
-- [User Interface Components](#user-interface-components-frontend)
-  - [Todo List View](#todo-list-view-frontend)
-  - [Add Todo Item Form](#add-todo-item-form-frontend)
-  - [Todo Item Actions](#todo-item-actions-frontend)
-- [Interaction with Backend API](#interaction-with-backend-api-frontend)
-- [Error Handling and Notifications](#error-handling-and-notifications-frontend)
+### Layered Architecture
 
+**Frontend Layers:**
+```
+UI Components → API Service Layer → Axios HTTP Client
+```
 
-### Overview
+**Backend Layers:**
+```
+Controllers → Services → Repositories → Database
+```
 
-These instructions will guide you through setting up the frontend on your local machine for development and testing purposes.
+📖 **Detailed Architecture Documentation**: [docs/architecture/ARCHITECTURE.md](docs/architecture/ARCHITECTURE.md)
+
+---
+
+## 🚀 Quick Start
 
 ### Prerequisites
 
-Before starting the frontend, ensure you have the following installed:
+Ensure you have the following installed:
+- **Docker** (version 20.0+)
+- **Docker Compose** (version 2.0+)
+- **Git**
 
-- Node.js (LTS version recommended)
-- npm (Node Package Manager)
-- Todo List API running on the backend (see Backend Documentation)
+Optional for local development:
+- **Node.js** (18.0+) and **npm**
+- **Java JDK** (17+) and **Maven** (3.6+)
 
-### Installation and Setup
-
-1. Clone the frontend repository to your local machine.
-2. Navigate to the cloned directory.
-3. Install the necessary npm packages with:
+### One-Command Deployment
 
 ```bash
-npm install
+# Clone the repository
+git clone https://github.com/robertfeo/hse-distsys-ws23.git
+cd hse-distsys-ws23
+
+# Start all services
+docker-compose up --build
 ```
 
-Start the development server with:
+**That's it!** The application will be available at:
+- 🌐 **Frontend**: http://localhost:3000
+- 🔧 **Backend API**: http://localhost:8080/api
+- 📊 **Jaeger UI**: http://localhost:16686
+
+### Stopping the Application
 
 ```bash
+# Stop all services
+docker-compose down
+
+# Stop and remove volumes (clear database)
+docker-compose down -v
+```
+
+---
+
+## 📁 Project Structure
+
+```
+hse-distsys-ws23/
+├── 📂 frontend/                # React frontend application
+│   ├── 📂 src/
+│   │   ├── 📂 components/     # Reusable React components
+│   │   ├── 📂 api/            # API service layer
+│   │   ├── App.js             # Main application component
+│   │   └── index.js           # Entry point
+│   ├── 📂 public/             # Static assets
+│   ├── package.json           # npm dependencies
+│   ├── tailwind.config.js     # TailwindCSS configuration
+│   └── Dockerfile             # Frontend container config
+│
+├── 📂 backend/                # Spring Boot backend
+│   ├── 📂 src/
+│   │   ├── 📂 main/java/com/todolist/backend/
+│   │   │   ├── 📂 controller/ # REST API controllers
+│   │   │   ├── 📂 service/    # Business logic
+│   │   │   ├── 📂 repository/ # Data access layer
+│   │   │   ├── 📂 model/      # JPA entities
+│   │   │   ├── 📂 dto/        # Data transfer objects
+│   │   │   ├── 📂 config/     # Configuration classes
+│   │   │   └── BackendApplication.java
+│   │   └── 📂 test/           # Unit and integration tests
+│   ├── pom.xml                # Maven dependencies
+│   └── Dockerfile             # Backend container config
+│
+├── 📂 docs/                   # Comprehensive documentation
+│   ├── 📂 api/                # API documentation
+│   ├── 📂 architecture/       # Architecture diagrams
+│   ├── 📂 deployment/         # Deployment guides
+│   └── 📂 screenshots/        # Application screenshots
+│
+├── 📂 .github/
+│   └── 📂 workflows/          # CI/CD pipeline
+│       ├── pipeline.yml       # Main CI/CD workflow
+│       └── publish.yml        # Docker publish workflow
+│
+├── docker-compose.yml         # Multi-container orchestration
+├── README.md                  # This file
+├── LICENSE                    # MIT License
+├── CONTRIBUTING.md            # Contribution guidelines
+└── CODE_OF_CONDUCT.md         # Community guidelines
+```
+
+---
+
+## 📚 API Documentation
+
+### Quick Reference
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/api/todos` | List all todo items |
+| `POST` | `/api/todos/add` | Create a new todo |
+| `GET` | `/api/todos/search` | Search by title or ID |
+| `PUT` | `/api/todos/update/{id}` | Update a todo item |
+| `DELETE` | `/api/todos/delete` | Delete a todo item |
+
+### Example API Calls
+
+**Create a Todo:**
+```bash
+curl -X POST http://localhost:8080/api/todos/add \
+  -H "Content-Type: application/json" \
+  -d '{"title": "Buy groceries", "isChecked": false}'
+```
+
+**Get All Todos:**
+```bash
+curl -X GET http://localhost:8080/api/todos
+```
+
+**Update a Todo:**
+```bash
+curl -X PUT http://localhost:8080/api/todos/update/1 \
+  -H "Content-Type: application/json" \
+  -d '{"isChecked": true}'
+```
+
+📖 **Complete API Documentation**: [docs/api/API_DOCUMENTATION.md](docs/api/API_DOCUMENTATION.md)
+
+---
+
+## 💻 Development
+
+### Local Development Setup
+
+#### Backend Development
+
+```bash
+cd backend
+
+# Run PostgreSQL with Docker
+docker run -d \
+  -e POSTGRES_DB=todolist \
+  -e POSTGRES_USER=robert \
+  -e POSTGRES_PASSWORD=securepassword \
+  -p 5432:5432 \
+  postgres:15-alpine
+
+# Build and run the application
+mvn clean install
+mvn spring-boot:run
+```
+
+Backend will be available at: http://localhost:8080
+
+#### Frontend Development
+
+```bash
+cd frontend
+
+# Install dependencies
+npm install
+
+# Start development server
 npm start
 ```
 
-The application will be served at http://localhost:3000 and will communicate with the Todo List API.
+Frontend will be available at: http://localhost:3000
 
-### User Interface Components
+### Environment Variables
 
-#### Todo List View
-
-Renders the list of todo items and handles state management.
-
-#### Add Todo Item Form
-
-Displays individual todo items and provides options to edit or delete.
-
-#### Todo Item Actions
-
-A form component that captures user input for new todo items.
-
-### Interaction with Backend API
-
-Ensure the backend API is running and accessible. By default, the frontend will attempt to connect to the API at http://localhost:8080/api/todos.
-
-### Error Handling and Notifications
-
-The frontend application communicates errors from the API to the user via alerts or error messages displayed in the UI. It also handles exceptions in the user interface gracefully.
-
-## Backend Documentation
-
-The Todo List API is a simple RESTful service that allows users to manage their todo items.
-
-### Table of Contents
-
-- [Overview](#overview-backend)
-- [Prerequisites](#prerequisites-backend)
-- [Installation and Setup](#installation-and-setup-backend)
-- [Running the Application](#running-the-application-backend)
-- [API Endpoints](#api-endpoints-backend)
-  - [List Todos](#list-todos-backend)
-  - [Create Todo Item](#create-todo-item-backend)
-  - [Retrieve Todo Item](#retrieve-todo-item-backend)
-  - [Update Todo Item](#update-todo-item-backend)
-  - [Delete Todo Item](#delete-todo-item-backend)
-- [Data Models](#data-models-backend)
-- [Error Handling and Responses](#error-handling-and-responses-backend)
-- [Database Configuration and Management](#database-configuration-and-management-backend)
-- [Observability and Tracing](#observability-and-tracing)
-  - [What is Jaeger?](#what-is-jaeger)
-  - [Integration with the Backend](#integration-with-the-backend)
-    - [Configuring Tracing](#configuring-tracing)
-    - [Using the Jaeger UI](#using-the-jaeger-ui)
-  - [Analyzing Traces](#analyzing-traces)
-  - [Logs and Metrics](#logs-and-metrics)
-  - [Adding Tracing to New Services](#adding-tracing-to-new-services)
-
-### Overview
-
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
-
-### Prerequisites
-
-Before running the service, you need to have the following installed:
-
-- Java JDK 17 or higher
-- Maven
-- PostgreSQL database
-
-### Installation and Setup
-
-1. Clone the repository to your local machine.
-2. Set up your PostgreSQL database using the provided connection details.
-3. Run the following command to build the project:
-
-```bash
-mvn clean install
-```
-### Running the Application
-
-Start the application with:
-
-```bash
-java -jar target/todo-list-backend-0.0.1-SNAPSHOT.jar
-```
-
-The API will be available at http://localhost:8080/api.
-
-### API Endpoints
-
-#### List Todos
-
-GET /api/todos
-Retrieves a list of all todo items.
-
-#### Create Todo Item
-
-POST /api/todos/add
-Accepts a JSON object representing a todo item to be added.
-
-#### Retrieve Todo Item
-
-GET /api/todos/search
-Query Parameters(only one required):
-
-- title: Search by the title of the todo item.
-- id: Search by the ID of the todo item.
-
-#### Update Todo Item
-
-PUT /api/todos/update/{id}
-Path Variable:
-- id: The ID of the todo item to update.
-
-Accepts a JSON object representing the updated fields of the todo item.
-
-#### Delete Todo Item
-
-DELETE /api/todos/delete
-Query Parameters:
-
-- title: Delete by the title of the todo item.
-- id: Delete by the ID of the todo item.
-
-### Data Models
-
-#### TodoItem
-
-- id (Integer): Unique identifier for the TodoItem (autogenerated)
-- title (String): Title of the TodoItem.
-- isChecked (boolean): Status of the TodoItem.
-
-### Database Configuration and Management
-
-Ensure the application connects to your PostgreSQL database with the following settings:
-
-```bash
-spring.datasource.url=jdbc:postgresql://database:5432/todolist
+#### Backend (.env or application.properties)
+```properties
+spring.datasource.url=jdbc:postgresql://localhost:5432/todolist
 spring.datasource.username=robert
 spring.datasource.password=securepassword
+spring.jpa.hibernate.ddl-auto=update
 ```
 
-### Error Handling and Responses
+#### Frontend (.env.local)
+```bash
+REACT_APP_API_URL=http://localhost:8080
+```
 
-The API uses HTTP status codes to indicate the success or failure of an API request. In the case of errors, a JSON object with error details is returned.
+### Hot Reload
 
-### Observability and Tracing
+- **Frontend**: React automatically reloads on file changes
+- **Backend**: Use Spring Boot DevTools for automatic restart
 
-In a distributed system, it's crucial to have insights into the application's performance and to trace the flow of requests through various services. To achieve this, the application is integrated with Jaeger, an open-source tracing system.
+---
 
-#### What is Jaeger?
+## 🧪 Testing
 
-Jaeger is a tracing system released by Uber, which provides monitoring and troubleshooting capabilities for microservice-based architectures. It allows developers to track request flows, measure performance, and monitor distributed transactions.
+### Backend Tests
 
-#### Integration with the Backend
+```bash
+cd backend
 
-Our backend service is configured to send trace data to a Jaeger agent. This is achieved through the use of OpenTracing libraries, which are compatible with Jaeger.
+# Run all tests
+mvn test
 
-##### Configuring Tracing
+# Run with coverage
+mvn test jacoco:report
 
-To enable tracing with Jaeger, the following environment variables are set for the backend service in the `docker-compose.yml`:
+# Run specific test
+mvn test -Dtest=TodoItemControllerTest
+```
 
+### Frontend Tests
+
+```bash
+cd frontend
+
+# Run all tests
+npm test
+
+# Run with coverage
+npm test -- --coverage
+
+# Run specific test
+npm test -- todos.test.js
+```
+
+### Integration Tests
+
+```bash
+# Start all services
+docker-compose up -d
+
+# Run integration test suite
+./run-integration-tests.sh
+```
+
+---
+
+## 🚢 Deployment
+
+### Docker Deployment (Recommended)
+
+The easiest way to deploy is using Docker Compose:
+
+```bash
+# Production deployment
+docker-compose -f docker-compose.prod.yml up -d
+```
+
+### Manual Deployment
+
+#### Deploy Backend
+
+```bash
+cd backend
+mvn clean package -DskipTests
+java -jar target/backend-v1.0.0.jar
+```
+
+#### Deploy Frontend
+
+```bash
+cd frontend
+npm run build
+# Serve the 'build' folder with nginx or your preferred web server
+```
+
+### Cloud Deployment
+
+Guides available for:
+- ☁️ **AWS (EC2, ECS, RDS)**: [docs/deployment/AWS.md](docs/deployment/AWS.md)
+- 🔵 **Azure (App Service)**: [docs/deployment/AZURE.md](docs/deployment/AZURE.md)
+- 🌐 **Google Cloud Platform**: [docs/deployment/GCP.md](docs/deployment/GCP.md)
+- 🎯 **DigitalOcean**: [docs/deployment/DIGITALOCEAN.md](docs/deployment/DIGITALOCEAN.md)
+
+---
+
+## 📊 Observability
+
+### Distributed Tracing with Jaeger
+
+Access Jaeger UI at: http://localhost:16686
+
+**Features:**
+- 🔍 Trace request flows across services
+- 📈 Identify performance bottlenecks
+- 🐛 Debug distributed transactions
+- 📊 Visualize service dependencies
+
+**Example Queries:**
+- Service: `todo-list-backend`
+- Operation: `GET /api/todos`
+- Lookback: `1h`
+
+### Metrics with Prometheus
+
+Backend exposes metrics at: http://localhost:8080/actuator/prometheus
+
+**Key Metrics:**
+- JVM memory usage
+- HTTP request rates
+- Database connection pool
+- Custom business metrics
+
+### Health Checks
+
+```bash
+# Backend health
+curl http://localhost:8080/actuator/health
+
+# Database connectivity
+curl http://localhost:8080/actuator/health/db
+```
+
+---
+
+## 🔧 Configuration
+
+### Database Configuration
+
+**Docker Compose** (default):
 ```yaml
-environment:
-  JAEGER_SERVICE_NAME: todo-list-backend
-  JAEGER_AGENT_HOST: jaeger
-  JAEGER_AGENT_PORT: 6831
+database:
+  POSTGRES_DB: todolist
+  POSTGRES_USER: robert
+  POSTGRES_PASSWORD: securepassword
 ```
 
-These settings direct the backend service to send trace data to the Jaeger agent hosted within our Docker environment.
+**Production**: Use environment variables or secrets management
 
-#### Using the Jaeger UI
+### CORS Configuration
 
-To view traces:
+Default allows `http://localhost:3000`. For production:
 
-Navigate to http://localhost:16686 - this is the default port where the Jaeger UI is accessible.
-Select the service name from the drop-down list.
-Use the search functionality to filter specific traces.
+```java
+@CrossOrigin(origins = {"https://yourdomain.com"})
+```
 
-#### Analyzing Traces
+### Logging Configuration
 
-The Jaeger UI provides a detailed view of the traces, showing the spans of each trace with timings, which can be used to identify performance bottlenecks or failures in the request flow.
+```properties
+# application.properties
+logging.level.root=INFO
+logging.level.com.todolist=DEBUG
+logging.pattern.console=%d{yyyy-MM-dd HH:mm:ss} - %msg%n
+```
 
-#### Logs and Metrics
+---
 
-In addition to tracing, logs and metrics can be observed through Jaeger's integration, providing a comprehensive overview of the system's health and performance.
+## 🤝 Contributing
 
-#### Adding Tracing to New Services
+Contributions are welcome! Please read our [Contributing Guidelines](CONTRIBUTING.md) first.
 
-When adding new services to the application, they can be instrumented using the OpenTracing API and configured to report to the same Jaeger instance, ensuring a unified view of the system's traces.
+### How to Contribute
 
-<!-- </> with 💛 by readMD (https://readmd.itsvg.in) -->
-    
+1. **Fork** the repository
+2. **Create** a feature branch (`git checkout -b feature/AmazingFeature`)
+3. **Commit** your changes (`git commit -m 'Add some AmazingFeature'`)
+4. **Push** to the branch (`git push origin feature/AmazingFeature`)
+5. **Open** a Pull Request
+
+### Development Guidelines
+
+- Follow existing code style
+- Write tests for new features
+- Update documentation
+- Keep commits atomic and descriptive
+
+---
+
+## 📄 License
+
+This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
+
+```
+MIT License - Copyright (c) 2023-2025 Robert Feo
+```
+
+---
+
+## 👨‍💻 Contact
+
+**Robert Feo**
+
+- 📧 Email: [your.email@example.com](mailto:your.email@example.com)
+- 💼 LinkedIn: [linkedin.com/in/robertfeo](https://linkedin.com/in/robertfeo)
+- 🐙 GitHub: [@robertfeo](https://github.com/robertfeo)
+- 🌐 Portfolio: [yourportfolio.com](https://yourportfolio.com)
+
+---
+
+## 🙏 Acknowledgments
+
+- **HSE University** - Distributed Systems Course (WS 2023)
+- **Spring Boot Team** - Excellent documentation
+- **React Team** - Amazing framework
+- **Open Source Community** - For all the great tools
+
+---
+
+## 📈 Project Status
+
+- ✅ **Core Features**: Complete
+- ✅ **Documentation**: Comprehensive
+- ✅ **Testing**: Unit & Integration tests
+- ✅ **CI/CD**: Automated pipeline
+- ✅ **Containerization**: Docker ready
+- 🚧 **Authentication**: Planned enhancement
+- 🚧 **Real-time Updates**: WebSocket integration planned
+
+---
+
+## 🌟 Star History
+
+If you find this project useful, please consider giving it a ⭐️!
+
+[![Star History Chart](https://api.star-history.com/svg?repos=robertfeo/hse-distsys-ws23&type=Date)](https://star-history.com/#robertfeo/hse-distsys-ws23&Date)
+
+---
+
+<div align="center">
+  <p>Made with ❤️ and ☕ by Robert Feo</p>
+  <p>
+    <a href="#-table-of-contents">Back to Top ⬆️</a>
+  </p>
+</div>

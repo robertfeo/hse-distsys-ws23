@@ -1,1 +1,10 @@
 .vscode
+
+# Environment variables
+.env
+.env.local
+.env.development
+.env.production
+
+# Keep example files
+!.env.example
